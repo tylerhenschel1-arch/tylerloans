@@ -1,0 +1,225 @@
+name: SEO Blog Agent
+
+on:
+  schedule:
+    # Runs Monday, Wednesday, Friday at 8am CT
+    - cron: '0 13 * * 1,3,5'
+  workflow_dispatch: # Allows manual trigger anytime
+
+jobs:
+  write-and-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Generate and publish blog post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import anthropic
+          import os
+          import json
+          import datetime
+          import random
+          import re
+
+          # ── TOPICS — Agent rotates through these ──
+          TOPICS = [
+              "How business owners in Katy TX can save thousands using the All-In-One mortgage",
+              "VA loan benefits most Houston veterans don't know about",
+              "FHA loans in Texas — complete guide for first time buyers",
+              "Construction loans in Katy TX — what you need to know",
+              "How real estate investors use the AIO loan to preserve liquidity",
+              "Conventional vs FHA loans in Houston — which is right for you",
+              "How physicians and doctors can optimize their mortgage in Texas",
+              "Self-employed mortgage guide for Houston business owners",
+              "First time home buyer programs in Katy TX 2025",
+              "How to use home equity as a business owner in Texas",
+              "All-In-One mortgage vs HELOC — what's the difference",
+              "Renovation loans in Houston — complete guide",
+              "How to reduce mortgage interest without refinancing",
+              "Builder spec financing in Katy TX — what developers need to know",
+              "Jumbo loans in Houston — qualifying as a high-income borrower",
+              "How financial planners use the AIO loan for client wealth optimization",
+              "Mortgage tips for real estate investors in the Houston market",
+              "Custom home construction loans in Katy TX — step by step guide",
+              "How to pay off your mortgage faster without extra payments",
+              "Texas mortgage rates — what drives them and how to get the best rate",
+          ]
+
+          # Pick a topic based on day of year to avoid repeats
+          day_of_year = datetime.datetime.now().timetuple().tm_yday
+          topic = TOPICS[day_of_year % len(TOPICS)]
+          
+          date_str = datetime.datetime.now().strftime("%B %d, %Y")
+          slug = topic.lower()
+          slug = re.sub(r'[^a-z0-9\s-]', '', slug)
+          slug = re.sub(r'\s+', '-', slug.strip())
+          slug = slug[:60]
+
+          print(f"Writing blog post about: {topic}")
+
+          # ── CALL CLAUDE TO WRITE THE POST ──
+          client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
+          
+          message = client.messages.create(
+              model="claude-haiku-4-5-20251001",
+              max_tokens=2000,
+              messages=[
+                  {
+                      "role": "user",
+                      "content": f"""Write a complete SEO-optimized blog post for tylerhloans.com about: {topic}
+
+Tyler Henschel is a Senior Loan Officer at CMG Home Loans in Katy, TX (NMLS #2034073).
+Phone: (979) 255-6219
+Email: thenschel@cmghomeloans.com
+Calendly: https://calendly.com/thenschel-cmghomeloans/30min
+
+Requirements:
+- 800-1200 words
+- Conversational but professional tone
+- Target keywords naturally throughout
+- Focus on Katy TX, Houston TX market
+- Include a strong CTA at the end to book a call with Tyler
+- Format as clean HTML with proper h1, h2, h3, p tags
+- Include a meta description in a comment at the top: <!-- META: your meta description here -->
+- Do NOT include <!DOCTYPE>, <html>, <head>, or <body> tags
+- Just the article content HTML
+- Make it genuinely helpful and informative
+- Mention Tyler naturally 2-3 times as the expert"""
+                  }
+              ]
+          )
+
+          blog_content = message.content[0].text
+          
+          # Extract meta description
+          meta_match = re.search(r'<!-- META: (.*?) -->', blog_content)
+          meta_desc = meta_match.group(1) if meta_match else f"Tyler Henschel, Senior Loan Officer in Katy TX, explains {topic.lower()}."
+
+          # ── BUILD FULL HTML PAGE ──
+          full_page = f"""<!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>{topic} | Tyler Henschel · CMG Home Loans Katy TX</title>
+          <meta name="description" content="{meta_desc}">
+          <meta property="og:title" content="{topic}">
+          <meta property="og:description" content="{meta_desc}">
+          <meta property="og:url" content="https://tylerhloans.com/blog/{slug}">
+          <link rel="canonical" href="https://tylerhloans.com/blog/{slug}">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+          <style>
+            :root {{
+              --navy: #0a1628; --gold: #c9a84c; --gold-light: #e8c97a;
+              --cream: #f7f4ef; --text: #1a1a2e; --muted: #5a6070; --white: #ffffff;
+            }}
+            * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+            body {{ font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }}
+            nav {{ background: var(--navy); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }}
+            .nav-name {{ font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1rem; text-decoration: none; }}
+            .nav-cta {{ background: var(--gold); color: var(--navy); padding: 0.5rem 1.2rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 500; }}
+            .hero {{ background: var(--navy); padding: 4rem 2rem; text-align: center; }}
+            .hero h1 {{ font-family: 'Playfair Display', serif; color: var(--white); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 400; max-width: 800px; margin: 0 auto 1rem; line-height: 1.2; }}
+            .hero-meta {{ color: rgba(255,255,255,0.45); font-size: 0.85rem; }}
+            .article {{ max-width: 780px; margin: 3rem auto; padding: 0 2rem 4rem; }}
+            .article h1 {{ font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1.5rem; display: none; }}
+            .article h2 {{ font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; color: var(--navy); margin: 2rem 0 0.8rem; }}
+            .article h3 {{ font-size: 1.1rem; font-weight: 500; color: var(--navy); margin: 1.5rem 0 0.6rem; }}
+            .article p {{ font-size: 1rem; font-weight: 300; line-height: 1.8; color: var(--muted); margin-bottom: 1.2rem; }}
+            .article ul, .article ol {{ padding-left: 1.5rem; margin-bottom: 1.2rem; }}
+            .article li {{ font-size: 1rem; font-weight: 300; line-height: 1.8; color: var(--muted); margin-bottom: 0.4rem; }}
+            .article strong {{ font-weight: 500; color: var(--text); }}
+            .cta-box {{ background: var(--navy); border-radius: 16px; padding: 2.5rem; text-align: center; margin-top: 3rem; }}
+            .cta-box h3 {{ font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.8rem; }}
+            .cta-box p {{ color: rgba(255,255,255,0.55); margin-bottom: 1.5rem; }}
+            .cta-btn {{ background: var(--gold); color: var(--navy); padding: 0.9rem 2rem; border-radius: 4px; text-decoration: none; font-weight: 500; display: inline-block; }}
+            .back-link {{ display: block; text-align: center; margin-top: 2rem; color: var(--muted); text-decoration: none; font-size: 0.85rem; }}
+            footer {{ background: #060e1b; padding: 2rem; text-align: center; }}
+            footer p {{ font-size: 0.7rem; color: rgba(255,255,255,0.25); line-height: 1.6; }}
+          </style>
+          </head>
+          <body>
+          <nav>
+            <a class="nav-name" href="/">Tyler Henschel · CMG Home Loans</a>
+            <a class="nav-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
+          </nav>
+          <div class="hero">
+            <h1>{topic}</h1>
+            <p class="hero-meta">By Tyler Henschel · {date_str} · Katy, TX</p>
+          </div>
+          <article class="article">
+            {blog_content}
+            <div class="cta-box">
+              <h3>Ready to talk through your options?</h3>
+              <p>Tyler Henschel specializes in helping Houston-area borrowers optimize their mortgage. Book a free 20-minute call.</p>
+              <a class="cta-btn" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Free Strategy Call</a>
+            </div>
+            <a class="back-link" href="/blog">← Back to all articles</a>
+          </article>
+          <footer>
+            <p>Tyler Henschel · Senior Loan Officer · CMG Home Loans · NMLS #2034073</p>
+            <p>24285 Katy Freeway Suite 400-G, Katy, TX 77494 · (979) 255-6219 · thenschel@cmghomeloans.com</p>
+            <p>© 2025 CMG Home Loans. Not a commitment to lend. Equal Housing Lender.</p>
+          </footer>
+          </body>
+          </html>"""
+
+          # ── PUSH TO GITHUB ──
+          import base64
+          import urllib.request
+
+          repo = "tylerhenschel1-arch/tylerhloans"
+          file_path = f"blog/{slug}/index.html"
+          token = os.environ['GITHUB_TOKEN']
+
+          # Check if file exists
+          url = f"https://api.github.com/repos/{repo}/contents/{file_path}"
+          headers = {
+              "Authorization": f"token {token}",
+              "Accept": "application/vnd.github.v3+json",
+              "Content-Type": "application/json"
+          }
+
+          try:
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req) as response:
+                  existing = json.loads(response.read())
+                  sha = existing.get('sha')
+          except:
+              sha = None
+
+          # Encode content
+          content_encoded = base64.b64encode(full_page.encode('utf-8')).decode('utf-8')
+
+          payload = {
+              "message": f"Blog: {topic[:60]}",
+              "content": content_encoded,
+          }
+          if sha:
+              payload["sha"] = sha
+
+          data = json.dumps(payload).encode('utf-8')
+          req = urllib.request.Request(url, data=data, headers=headers, method='PUT')
+          
+          with urllib.request.urlopen(req) as response:
+              result = json.loads(response.read())
+              print(f"✅ Published: tylerhloans.com/blog/{slug}")
+              print(f"   Topic: {topic}")
+              print(f"   Date: {date_str}")
+
+          PYTHON_SCRIPT
