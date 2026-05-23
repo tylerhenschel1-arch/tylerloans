@@ -73,7 +73,11 @@ COMPLIANCE RULES (CMG Financial Marketing Policy — strictly follow all of thes
 - NEVER make any claim about specific payment amounts without full context.
 - Do NOT display or reference any specific current mortgage rates — rates change daily and must come from an approved source.
 - All product descriptions must be accurate and not misleading. Do not overstate benefits.
-- Use educational, informational language throughout. The post is informational, not a binding offer of credit."""
+- Use educational, informational language throughout. The post is informational, not a binding offer of credit.
+- NEVER use unqualified superlatives or unprovable claims such as "best rates," "lowest costs," "cheapest," or "free" (unless a specific product genuinely has no fee and that is documented).
+- Keep content general and educational in nature. Do not frame the post as a specific product advertisement with rate or payment terms.
+- Use inclusive, welcoming language. Never use phrasing that could discourage any person from applying based on race, color, national origin, religion, sex, familial status, or disability (Fair Housing Act / ECOA compliance).
+- Do not make any statement that is inaccurate, inconsistent, or could be considered deceptive or misleading under UDAAP standards."""
     }]
 )
 
