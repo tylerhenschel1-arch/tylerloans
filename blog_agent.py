@@ -61,7 +61,19 @@ Requirements:
 - Format as clean HTML using h2, h3, p, ul, li tags only
 - Start with a meta description comment like: <!-- META: description here -->
 - Do NOT include DOCTYPE html head or body tags
-- Mention Tyler naturally 2 to 3 times as the expert"""
+- Mention Tyler naturally 2 to 3 times as the expert
+
+COMPLIANCE RULES (CMG Financial Marketing Policy — strictly follow all of these):
+- NEVER quote specific interest rates or APR figures. General language like "competitive rates" is fine.
+- NEVER imply or state that any reader is pre-approved, guaranteed, or likely to qualify for any loan.
+- NEVER use the word "fixed" in a way that could mislead readers about rate variability.
+- NEVER make claims about eliminating, reducing, or restructuring debt.
+- NEVER misrepresent any loan product as government-backed or government-affiliated unless it explicitly is (e.g., VA, FHA, USDA).
+- NEVER state or imply that no fees or costs are associated with any loan product.
+- NEVER make any claim about specific payment amounts without full context.
+- Do NOT display or reference any specific current mortgage rates — rates change daily and must come from an approved source.
+- All product descriptions must be accurate and not misleading. Do not overstate benefits.
+- Use educational, informational language throughout. The post is informational, not a binding offer of credit."""
     }]
 )
 
@@ -127,6 +139,7 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 <footer>
 <p>Tyler Henschel &middot; Senior Loan Officer &middot; CMG Home Loans &middot; NMLS #2034073</p>
 <p>24285 Katy Freeway Suite 400-G, Katy, TX 77494 &middot; (979) 255-6219 &middot; thenschel@cmghomeloans.com</p>
+<p>Offer of credit subject to credit approval. CMG Mortgage, Inc., dba CMG Financial NMLS #1820 is an equal opportunity lender.</p>
 <p>&copy; 2025 CMG Home Loans. Not a commitment to lend. Equal Housing Lender.</p>
 </footer>
 </body>
