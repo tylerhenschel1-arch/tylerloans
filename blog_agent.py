@@ -10,7 +10,7 @@ TOPICS = [
     "How business owners in Katy TX can save thousands using the All-In-One mortgage",
     "VA loan benefits most Houston veterans don't know about",
     "FHA loans in Texas — complete guide for first time buyers in 2025",
-    "Construction loans in Katy TX — what you need to know before you build",
+    "Custom home construction loans in Katy TX — step by step guide",
     "How real estate investors use the AIO loan to preserve liquidity",
     "Conventional vs FHA loans in Houston — which is right for you",
     "How physicians and doctors can optimize their mortgage in Texas",
@@ -20,13 +20,16 @@ TOPICS = [
     "All-In-One mortgage vs HELOC — what is the difference",
     "Renovation loans in Houston — complete guide",
     "How to reduce mortgage interest without refinancing",
-    "Builder spec financing in Katy TX — what developers need to know",
+    "Spec construction financing for builders in the Houston area — how it works",
     "Jumbo loans in Houston — qualifying as a high income borrower",
     "How financial planners use the AIO loan for client wealth optimization",
     "Mortgage tips for real estate investors in the Houston market",
-    "Custom home construction loans in Katy TX — step by step guide",
+    "Bridge loans for builders in Katy TX — freeing up capital between projects",
     "How to pay off your mortgage faster without extra payments",
     "Texas mortgage rates — what drives them and how to get the best rate",
+    "CMG Build and Lock program — how Houston builders can lock rates before buyers are found",
+    "What is BuilderFLEX — spec construction financing for production builders in Texas",
+    "Spec vs custom construction loans in Katy TX — which is right for your project",
 ]
 
 day_of_year = datetime.datetime.now().timetuple().tm_yday
@@ -77,7 +80,14 @@ COMPLIANCE RULES (CMG Financial Marketing Policy — strictly follow all of thes
 - NEVER use unqualified superlatives or unprovable claims such as "best rates," "lowest costs," "cheapest," or "free" (unless a specific product genuinely has no fee and that is documented).
 - Keep content general and educational in nature. Do not frame the post as a specific product advertisement with rate or payment terms.
 - Use inclusive, welcoming language. Never use phrasing that could discourage any person from applying based on race, color, national origin, religion, sex, familial status, or disability (Fair Housing Act / ECOA compliance).
-- Do not make any statement that is inaccurate, inconsistent, or could be considered deceptive or misleading under UDAAP standards."""
+- Do not make any statement that is inaccurate, inconsistent, or could be considered deceptive or misleading under UDAAP standards.
+
+PRODUCT ACCURACY — BUILDER AND SPEC FINANCING PROGRAMS:
+- CMG offers spec construction financing for experienced builders across four main products: Spec (vertical/ground-up), Bridge (completed inventory), Horizontal (land development), and BuilderFLEX (one approval, multiple projects). Always describe these accurately.
+- Spec construction financing targets experienced builders — typically 5 to 50 homes per year with a proven track record. Do not imply it is available to first-time or inexperienced builders.
+- The Spec Lock (Build and Lock) program allows builders to reserve a rate for 60 or 90 days for Conventional, FHA, VA, and USDA loans only. It is NOT available for Non-Agency products. Do not imply otherwise.
+- The List and Lock program is NOT available for AIO loans, HELOCs, construction loans, Non-QM, or bond/HFA loans. Do not describe it as available for those products.
+- CRITICAL: The All-In-One (AIO) loan is NOT available for spec construction financing in Texas. Never suggest or imply that Texas builders can use the AIO loan for spec construction purposes."""
     }]
 )
 
