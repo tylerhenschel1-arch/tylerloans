@@ -6,30 +6,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  write-and-publish:
+  blog:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install anthropic
+      - run: pip install anthropic
 
-      - name: Generate and publish blog post
+      - name: Run blog agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 blog_agent.py
 
-      - name: Commit new blog post
+      - name: Commit and push
         run: |
-          git config --global user.email "blog-agent@tylerhloans.com"
-          git config --global user.name "Blog Agent"
+          git config user.email "agent@tylerhloans.com"
+          git config user.name "Blog Agent"
           git add -A
-          git diff --staged --quiet || git commit -m "Blog post: $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "Blog post $(date +%Y-%m-%d)"
           git push
