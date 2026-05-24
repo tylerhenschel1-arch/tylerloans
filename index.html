@@ -511,8 +511,8 @@ function submitForm(e) {
   e.preventDefault();
   const form = document.getElementById('inquiryForm');
   const data = new FormData(form);
-  // Submit to Formspree — sign up at formspree.io and replace YOUR_FORM_ID
-  fetch('https://formspree.io/f/YOUR_FORM_ID', {
+  // Submit to Formspree
+  fetch('https://formspree.io/f/mjgzebly', {
     method: 'POST', body: data, headers: { 'Accept': 'application/json' }
   }).then(r => {
     if (r.ok) {
