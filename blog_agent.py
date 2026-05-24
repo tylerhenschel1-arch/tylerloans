@@ -244,6 +244,47 @@ slug = slug[:60].rstrip('-')
 
 print(f"Writing: {topic}")
 
+faq_message = client.messages.create(
+    model="claude-haiku-4-5-20251001",
+    max_tokens=600,
+    messages=[{
+        "role": "user",
+        "content": f"""Generate 3 FAQ questions and answers about: {topic}
+
+Format as JSON array only, no other text:
+[
+  {{"q": "Question one?", "a": "Answer one."}},
+  {{"q": "Question two?", "a": "Answer two."}},
+  {{"q": "Question three?", "a": "Answer three."}}
+]
+
+Keep answers 2-3 sentences. Focus on what Houston TX homebuyers actually search for."""
+    }]
+)
+
+try:
+    faq_data = json.loads(faq_message.content[0].text.strip())
+except Exception:
+    faq_data = []
+
+faq_schema = ""
+if faq_data:
+    faq_items = ",\n".join([
+        f'{{"@type":"Question","name":{json.dumps(f["q"])},"acceptedAnswer":{{"@type":"Answer","text":{json.dumps(f["a"])}}}}}'
+        for f in faq_data
+    ])
+    faq_schema = f"""<script type="application/ld+json">
+{{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{faq_items}]}}
+</script>"""
+
+faq_html = ""
+if faq_data:
+    faq_items_html = "\n".join([
+        f'<div class="faq-item"><h3>{f["q"]}</h3><p>{f["a"]}</p></div>'
+        for f in faq_data
+    ])
+    faq_html = f'<div class="faq-block"><h2>Frequently Asked Questions</h2>{faq_items_html}</div>'
+
 message = client.messages.create(
     model="claude-haiku-4-5-20251001",
     max_tokens=2000,
@@ -305,8 +346,16 @@ full_page = f"""<!DOCTYPE html>
 <title>{topic} | Tyler Henschel CMG Home Loans Katy TX</title>
 <meta name="description" content="{meta_desc}">
 <link rel="canonical" href="https://tylerhloans.com/blog/{slug}">
+<meta property="og:title" content="{topic} | Tyler Henschel">
+<meta property="og:description" content="{meta_desc}">
+<meta property="og:url" content="https://tylerhloans.com/blog/{slug}">
+<meta property="og:type" content="article">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{{"@context":"https://schema.org","@type":"Article","headline":{json.dumps(topic)},"description":{json.dumps(meta_desc)},"datePublished":"{date_str}","author":{{"@type":"Person","name":"Tyler Henschel","url":"https://tylerhloans.com","jobTitle":"Senior Loan Officer","worksFor":{{"@type":"Organization","name":"CMG Home Loans"}}}},"publisher":{{"@type":"Organization","name":"CMG Home Loans","url":"https://tylerhloans.com"}}}}
+</script>
+{faq_schema}
 <style>
 :root{{--navy:#0a1628;--gold:#c9a84c;--gold-light:#e8c97a;--cream:#f7f4ef;--text:#1a1a2e;--muted:#5a6070;--white:#ffffff}}
 *{{box-sizing:border-box;margin:0;padding:0}}
@@ -334,9 +383,15 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 </style>
 </head>
 <body>
-<nav>
-<a class="nav-name" href="/">Tyler Henschel · CMG Home Loans</a>
-<a class="nav-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15)">
+<a style="text-decoration:none" href="/"><div style="font-family:'Playfair Display',serif;font-size:1rem;color:#e8c97a">Tyler Henschel</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.08em">CMG Home Loans · Katy TX</div></a>
+<div style="display:flex;gap:1.5rem;align-items:center">
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/">Home</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/products/">Products</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/calculator/">Calculator</a>
+<a style="color:#e8c97a;text-decoration:none;font-size:0.85rem" href="/blog/">Blog</a>
+<a style="background:#c9a84c;color:#0a1628;font-size:0.78rem;font-weight:500;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
+</div>
 </nav>
 <div class="hero">
 <h1>{topic}</h1>
@@ -344,6 +399,8 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 </div>
 <article class="article">
 {content}
+{faq_html}
+<style>.faq-block{{background:#f7f4ef;border-radius:12px;padding:2rem;margin:2rem 0}}.faq-block h2{{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;color:#0a1628;margin-bottom:1.2rem}}.faq-item{{margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(10,22,40,0.08)}}.faq-item:last-child{{margin-bottom:0;padding-bottom:0;border-bottom:none}}.faq-item h3{{font-size:0.95rem;font-weight:500;color:#0a1628;margin-bottom:0.4rem}}.faq-item p{{font-size:0.88rem;font-weight:300;color:#5a6070;line-height:1.7}}</style>
 <div class="cta-box">
 <h3>Ready to explore your options?</h3>
 <p>Tyler Henschel specializes in helping Houston-area borrowers find the right mortgage strategy. Book a free 20-minute call.</p>
@@ -365,6 +422,45 @@ with open(f"blog/{slug}/index.html", "w") as f:
     f.write(full_page)
 
 print(f"Done: blog/{slug}/index.html")
+
+# Update posts.json manifest (read existing, prepend new post, write back)
+posts_file = "blog/posts.json"
+posts = []
+if os.path.exists(posts_file):
+    with open(posts_file, "r") as f:
+        try:
+            posts = json.load(f)
+        except Exception:
+            posts = []
+
+new_entry = {"title": topic, "slug": slug, "date": date_str, "meta": meta_desc}
+posts = [p for p in posts if p.get("slug") != slug]  # remove duplicate if re-run
+posts.insert(0, new_entry)
+
+with open(posts_file, "w") as f:
+    json.dump(posts, f, indent=2)
+
+print(f"Updated posts.json ({len(posts)} posts)")
+
+# Update sitemap.xml with all blog posts
+blog_urls = "\n".join([
+    f'  <url><loc>https://tylerhloans.com/blog/{p["slug"]}/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>'
+    for p in posts
+])
+sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://tylerhloans.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://tylerhloans.com/products/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tylerhloans.com/calculator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tylerhloans.com/blog/</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tylerhloans.com/all-in-one/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+{blog_urls}
+</urlset>"""
+
+with open("sitemap.xml", "w") as f:
+    f.write(sitemap)
+
+print(f"Updated sitemap.xml")
 
 # Auto-commit and push if running in CI
 if os.environ.get("CI"):
