@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refinance Calculator | Should You Refinance? | Tyler Henschel CMG Home Loans Houston TX</title>
+<meta name="description" content="Find out exactly how much you'd save by refinancing. Enter your current rate, see your new payment, break-even timeline, and total savings — specific to Texas. Tyler Henschel NMLS #2034073.">
+<link rel="canonical" href="https://tylerhloans.com/refinance/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--gold:#c9a84c;--gold-light:#e8c97a;--cream:#f7f4ef;--text:#1a1a2e;--muted:#5a6070;--white:#ffffff;--green:#22c55e;--red:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.8rem 2.5rem;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15)}
+.nav-brand{text-decoration:none;flex-shrink:0}
+.nav-name{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--gold-light)}
+.nav-sub{font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:0.07em;margin-top:1px}
+.nav-links{display:flex;gap:1.6rem}
+.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold-light)}
+.nav-right{display:flex;gap:0.6rem;align-items:center}
+.nav-apply{border:1px solid rgba(201,168,76,0.4);color:var(--gold-light);font-size:0.75rem;padding:0.45rem 1rem;border-radius:4px;text-decoration:none}
+.nav-cta{background:var(--gold);color:var(--navy);font-size:0.75rem;font-weight:500;padding:0.45rem 1rem;border-radius:4px;text-decoration:none}
+.nav-cta:hover{background:var(--gold-light)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:20px;height:2px;background:rgba(255,255,255,0.7);border-radius:2px}
+.nav-mobile{display:none;flex-direction:column;background:rgba(10,22,40,0.99);padding:1rem 1.5rem 1.5rem;border-bottom:1px solid rgba(201,168,76,0.1);position:fixed;top:57px;left:0;right:0;z-index:199}
+.nav-mobile a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.95rem;padding:0.65rem 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.nav-mobile.open{display:flex}
+@media(max-width:900px){nav{padding:0.8rem 1.2rem}.nav-links{display:none}.hamburger{display:flex}}
+
+.page-hero{background:var(--navy);padding:8rem 3rem 4rem;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.03) 1px,transparent 1px);background-size:70px 70px;pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);flex-shrink:0}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:400;color:var(--white);margin-bottom:0.8rem;position:relative;line-height:1.15}
+.page-hero h1 em{font-style:italic;color:var(--gold-light)}
+.page-hero p{font-size:0.97rem;font-weight:300;color:rgba(255,255,255,0.5);max-width:600px;line-height:1.75;position:relative}
+@media(max-width:768px){.page-hero{padding:6rem 1.5rem 3rem}}
+
+/* CALC LAYOUT */
+.calc-body{max-width:1100px;margin:0 auto;padding:3rem 2rem 6rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+@media(max-width:900px){.calc-body{grid-template-columns:1fr;padding:2rem 1.5rem 4rem}}
+
+/* INPUT PANEL */
+.input-panel{background:var(--white);border-radius:16px;padding:2rem;border:1px solid rgba(10,22,40,0.08);position:sticky;top:80px}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;color:var(--navy);margin-bottom:1.5rem}
+.field{margin-bottom:1.2rem}
+.field label{display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem}
+.field label span{font-size:0.85rem;font-weight:500;color:var(--navy);text-transform:none;letter-spacing:0}
+.input-wrap{position:relative}
+.input-prefix{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);font-size:0.9rem;color:var(--muted);pointer-events:none}
+.input-suffix{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);font-size:0.9rem;color:var(--muted);pointer-events:none}
+.field input[type=number]{width:100%;border:1.5px solid rgba(10,22,40,0.12);border-radius:8px;padding:0.7rem 2rem 0.7rem 1.8rem;font-family:inherit;font-size:0.95rem;color:var(--navy);outline:none;transition:border-color .2s;background:var(--cream)}
+.field input[type=number]:focus{border-color:var(--gold)}
+.field input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer;margin-top:0.3rem;height:4px}
+.divider{border:none;border-top:1px solid rgba(10,22,40,0.07);margin:1.2rem 0}
+.market-rate-note{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:0.8rem 1rem;font-size:0.78rem;color:var(--muted);line-height:1.55;margin-bottom:1.2rem}
+.market-rate-note strong{color:var(--navy)}
+
+/* RESULTS PANEL */
+.results-panel{display:flex;flex-direction:column;gap:1.5rem}
+
+.comparison-card{background:var(--white);border-radius:16px;padding:2rem;border:1px solid rgba(10,22,40,0.08)}
+.comparison-title{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.payment-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;margin-bottom:1.2rem}
+.payment-box{border-radius:10px;padding:1.2rem;text-align:center}
+.payment-box.current{background:#fff5f5;border:1px solid #fecaca}
+.payment-box.new{background:#f0fdf4;border:1px solid #bbf7d0}
+.payment-label{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem}
+.payment-amount{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;line-height:1}
+.payment-amount.red{color:var(--red)}
+.payment-amount.green{color:#16a34a}
+.payment-note{font-size:0.7rem;color:var(--muted);margin-top:0.2rem}
+.arrow-center{text-align:center;font-size:1.5rem;color:var(--muted)}
+
+/* SAVINGS HIGHLIGHT */
+.savings-card{background:var(--navy);border-radius:16px;padding:2rem;border:1px solid rgba(201,168,76,0.15)}
+.savings-title{font-size:0.68rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.savings-big{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:400;color:var(--gold-light);line-height:1;margin-bottom:0.3rem}
+.savings-sub{font-size:0.8rem;font-weight:300;color:rgba(255,255,255,0.45);margin-bottom:1.5rem}
+.savings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.savings-item{background:rgba(255,255,255,0.04);border-radius:10px;padding:1rem}
+.savings-item-label{font-size:0.65rem;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.3rem}
+.savings-item-value{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--white);line-height:1}
+.savings-item-value.gold{color:var(--gold-light)}
+
+/* BREAK-EVEN */
+.breakeven-card{background:var(--cream-dark,#ede9e1);border-radius:16px;padding:2rem;border:1px solid rgba(10,22,40,0.07)}
+.breakeven-title{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.breakeven-number{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--navy);line-height:1;margin-bottom:0.3rem}
+.breakeven-sub{font-size:0.82rem;color:var(--muted);font-weight:300;margin-bottom:1.2rem;line-height:1.5}
+.timeline-bar{background:rgba(10,22,40,0.1);border-radius:99px;height:8px;overflow:hidden;margin-bottom:0.5rem}
+.timeline-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .5s ease}
+.timeline-labels{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--muted)}
+
+/* NOT WORTH IT STATE */
+.not-worth-it{display:none;background:#fff8e6;border:1px solid #fde68a;border-radius:12px;padding:1.2rem;font-size:0.85rem;color:#92400e;line-height:1.6}
+
+/* CTA */
+.calc-cta{background:var(--navy);border-radius:16px;padding:2rem;text-align:center;border:1px solid rgba(201,168,76,0.15)}
+.calc-cta h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;color:var(--white);margin-bottom:0.6rem}
+.calc-cta p{font-size:0.85rem;font-weight:300;color:rgba(255,255,255,0.45);margin-bottom:1.2rem;line-height:1.65}
+.cta-btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;padding:0.85rem 2rem;border-radius:8px;font-size:0.88rem;font-weight:500;margin:0 0.4rem 0.5rem}
+.cta-btn:hover{background:var(--gold-light)}
+.cta-btn.outline{background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold-light)}
+
+/* EXPLAINER */
+.explainer{max-width:1100px;margin:0 auto;padding:0 2rem 5rem}
+.explainer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.explainer-card{background:var(--white);border-radius:12px;padding:1.5rem;border:1px solid rgba(10,22,40,0.07)}
+.explainer-icon{font-size:1.6rem;margin-bottom:0.8rem}
+.explainer-title{font-size:0.95rem;font-weight:500;color:var(--navy);margin-bottom:0.5rem}
+.explainer-text{font-size:0.82rem;font-weight:300;color:var(--muted);line-height:1.65}
+@media(max-width:768px){.explainer-grid{grid-template-columns:1fr}.explainer{padding:0 1.5rem 4rem}}
+
+footer{background:#060e1b;padding:2rem 3rem;border-top:1px solid rgba(201,168,76,0.08)}
+.footer-nav{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.footer-nav a{color:rgba(255,255,255,0.35);text-decoration:none;font-size:0.78rem}
+.footer-nav a:hover{color:var(--gold-light)}
+hr{border:none;border-top:1px solid rgba(255,255,255,0.05);margin-bottom:1rem}
+.footer-compliance p{font-size:0.68rem;color:rgba(255,255,255,0.18);line-height:1.7}
+@media(max-width:768px){footer{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">
+    <div class="nav-name">Tyler Henschel</div>
+    <div class="nav-sub">CMG Home Loans &nbsp;·&nbsp; NMLS #2034073</div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/products/">Products</a><a href="/investors/">Investors</a>
+    <a href="/builders/">Builders</a><a href="/refinance/" class="active">Refinance</a><a href="/blog/">Blog</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-apply" href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now</a>
+    <a class="nav-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
+    <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-mobile" id="mobileNav">
+  <a href="/">Home</a><a href="/products/">Products</a><a href="/investors/">Investors</a>
+  <a href="/builders/">Builders</a><a href="/refinance/">Refinance</a><a href="/blog/">Blog</a>
+  <a href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now →</a>
+  <a href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call →</a>
+</div>
+
+<div class="page-hero">
+  <div class="eyebrow">Refinance Savings Analyzer</div>
+  <h1>Should You Refinance?<br><em>See the Real Numbers.</em></h1>
+  <p>Enter your current loan details and a new rate to see your exact monthly savings, when you break even on closing costs, and how much you'd save over the life of the loan. Built for Texas homeowners.</p>
+</div>
+
+<div class="calc-body">
+  <!-- INPUT PANEL -->
+  <div class="input-panel">
+    <div class="panel-title">Your Loan Details</div>
+
+    <div class="field">
+      <label>Current Loan Balance <span id="balanceDisplay">$350,000</span></label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="balance" value="350000" min="50000" max="3000000" step="5000" oninput="updateDisplay('balance','balanceDisplay',true);calculate()"></div>
+      <input type="range" id="balanceRange" min="50000" max="2000000" step="5000" value="350000" oninput="syncRange('balance','balanceRange','balanceDisplay',true);calculate()">
+    </div>
+
+    <div class="field">
+      <label>Current Interest Rate <span id="currentRateDisplay">6.75%</span></label>
+      <div class="input-wrap"><input type="number" id="currentRate" value="6.75" min="2" max="15" step="0.125" style="padding-left:0.9rem" oninput="updateDisplay('currentRate','currentRateDisplay',false,'%');calculate()"><span class="input-suffix">%</span></div>
+      <input type="range" id="currentRateRange" min="2" max="15" step="0.125" value="6.75" oninput="syncRange('currentRate','currentRateRange','currentRateDisplay',false,'%');calculate()">
+    </div>
+
+    <div class="field">
+      <label>Years Remaining on Loan <span id="yearsDisplay">27 years</span></label>
+      <div class="input-wrap"><input type="number" id="years" value="27" min="1" max="30" step="1" style="padding-left:0.9rem" oninput="updateDisplay('years','yearsDisplay',false,' years');calculate()"><span class="input-suffix">yrs</span></div>
+      <input type="range" id="yearsRange" min="1" max="30" step="1" value="27" oninput="syncRange('years','yearsRange','yearsDisplay',false,' years');calculate()">
+    </div>
+
+    <hr class="divider">
+    <div class="market-rate-note">👇 Enter the new rate Tyler quoted you, or use a market estimate. <strong>This is not a commitment to lend.</strong> Book a call for your actual rate.</div>
+
+    <div class="field">
+      <label>New Interest Rate <span id="newRateDisplay">6.00%</span></label>
+      <div class="input-wrap"><input type="number" id="newRate" value="6.00" min="2" max="15" step="0.125" style="padding-left:0.9rem" oninput="updateDisplay('newRate','newRateDisplay',false,'%');calculate()"><span class="input-suffix">%</span></div>
+      <input type="range" id="newRateRange" min="2" max="15" step="0.125" value="6.00" oninput="syncRange('newRate','newRateRange','newRateDisplay',false,'%');calculate()">
+    </div>
+
+    <div class="field">
+      <label>New Loan Term <span id="newTermDisplay">30 years</span></label>
+      <div class="input-wrap"><input type="number" id="newTerm" value="30" min="10" max="30" step="5" style="padding-left:0.9rem" oninput="updateDisplay('newTerm','newTermDisplay',false,' years');calculate()"><span class="input-suffix">yrs</span></div>
+    </div>
+
+    <div class="field">
+      <label>Estimated Closing Costs <span id="closingDisplay">$5,000</span></label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="closing" value="5000" min="0" max="30000" step="500" oninput="updateDisplay('closing','closingDisplay',true);calculate()"></div>
+      <input type="range" id="closingRange" min="0" max="30000" step="500" value="5000" oninput="syncRange('closing','closingRange','closingDisplay',true);calculate()">
+    </div>
+  </div>
+
+  <!-- RESULTS PANEL -->
+  <div class="results-panel">
+
+    <div class="comparison-card">
+      <div class="comparison-title">Monthly Payment Comparison (Principal &amp; Interest)</div>
+      <div class="payment-compare">
+        <div class="payment-box current">
+          <div class="payment-label">Current Payment</div>
+          <div class="payment-amount red" id="currentPayment">$2,316</div>
+          <div class="payment-note" id="currentRateLabel">@ 6.75%</div>
+        </div>
+        <div class="arrow-center">→</div>
+        <div class="payment-box new">
+          <div class="payment-label">New Payment</div>
+          <div class="payment-amount green" id="newPayment">$2,098</div>
+          <div class="payment-note" id="newRateLabel">@ 6.00%</div>
+        </div>
+      </div>
+      <div id="notWorthIt" class="not-worth-it" style="display:none">⚠️ With those numbers, your new payment would be <strong>higher</strong> than your current payment. A refinance may not make sense unless you're shortening the loan term or cashing out equity. <a href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank" style="color:#92400e;font-weight:500">Book a call to discuss your options →</a></div>
+    </div>
+
+    <div class="savings-card">
+      <div class="savings-title">Monthly Savings</div>
+      <div class="savings-big" id="monthlySavings">$218/mo</div>
+      <div class="savings-sub">That's money back in your pocket every single month.</div>
+      <div class="savings-grid">
+        <div class="savings-item"><div class="savings-item-label">1-Year Savings</div><div class="savings-item-value gold" id="oneYear">$2,616</div></div>
+        <div class="savings-item"><div class="savings-item-label">5-Year Savings</div><div class="savings-item-value gold" id="fiveYear">$13,080</div></div>
+        <div class="savings-item"><div class="savings-item-label">10-Year Savings</div><div class="savings-item-value gold" id="tenYear">$26,160</div></div>
+        <div class="savings-item"><div class="savings-item-label">Full Loan Savings</div><div class="savings-item-value gold" id="totalSavings">$78,480</div></div>
+      </div>
+    </div>
+
+    <div class="breakeven-card">
+      <div class="breakeven-title">Break-Even Analysis</div>
+      <div class="breakeven-number" id="breakevenMonths">23 months</div>
+      <div class="breakeven-sub" id="breakevenText">After <strong>23 months</strong> (about 2 years), your savings will have paid for the $5,000 in closing costs. After that, every month is pure savings.</div>
+      <div class="timeline-bar"><div class="timeline-fill" id="timelineFill" style="width:65%"></div></div>
+      <div class="timeline-labels"><span>Closing</span><span id="breakevenLabel">Break-Even: 23 mo</span><span id="endLabel">30 yrs</span></div>
+    </div>
+
+    <div class="calc-cta">
+      <h3>These Numbers Look Good?</h3>
+      <p>Book a free call with Tyler to get your real rate, verify the savings, and find out if you qualify. Takes 20 minutes.</p>
+      <a class="cta-btn" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Free Call</a>
+      <a class="cta-btn outline" href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Start Application</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- EXPLAINER -->
+<div class="explainer">
+  <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:1.5rem;font-weight:400">What These Numbers Mean</div>
+  <div class="explainer-grid">
+    <div class="explainer-card"><div class="explainer-icon">💸</div><div class="explainer-title">Monthly Savings</div><div class="explainer-text">The difference between your current P&amp;I payment and your new P&amp;I payment. Note this doesn't include taxes or insurance, which don't change when you refinance.</div></div>
+    <div class="explainer-card"><div class="explainer-icon">⚖️</div><div class="explainer-title">Break-Even Point</div><div class="explainer-text">How many months until your total savings exceed your closing costs. If you plan to stay in the home longer than that, refinancing likely makes financial sense.</div></div>
+    <div class="explainer-card"><div class="explainer-icon">📅</div><div class="explainer-title">Total Savings</div><div class="explainer-text">Total P&amp;I savings over the remaining life of the new loan vs continuing with your current loan. Does not account for rate changes on ARMs or opportunity cost of closing costs.</div></div>
+  </div>
+  <p style="font-size:0.75rem;color:var(--muted);margin-top:1.5rem;line-height:1.65">This calculator is for educational purposes only. Results are estimates based on fixed-rate P&amp;I payments and do not constitute a loan offer or commitment. Actual rates, terms, and savings may differ. Contact Tyler Henschel, NMLS #2034073, for a personalized refinance analysis.</p>
+</div>
+
+<footer>
+  <div class="footer-nav">
+    <a href="/">Home</a><a href="/products/">Products</a><a href="/investors/">Investors</a>
+    <a href="/builders/">Builders</a><a href="/refinance/">Refinance</a><a href="/blog/">Blog</a>
+    <a href="/calculator/">Calculator</a><a href="tel:9792556219">(979) 255-6219</a>
+    <a href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now</a>
+  </div>
+  <hr>
+  <div class="footer-compliance">
+    <p>Tyler Henschel · NMLS #2034073 · 24285 Katy Freeway Suite 400-G, Katy TX 77494</p>
+    <p>Offer of credit subject to credit approval. CMG Mortgage, Inc., dba CMG Financial NMLS #1820 is an equal opportunity lender. Not a commitment to lend. Equal Housing Lender. © 2026 CMG Home Loans.</p>
+  </div>
+</footer>
+
+<script>
+function fmt(n){return '$'+Math.round(n).toLocaleString()}
+function fmtRate(r){return r.toFixed(3).replace(/\.?0+$/,'')+'%'}
+function calcPI(principal,annualRate,months){
+  if(annualRate===0)return principal/months;
+  const r=annualRate/100/12;
+  return principal*(r*Math.pow(1+r,months))/(Math.pow(1+r,months)-1);
+}
+function updateDisplay(inputId,displayId,isDollar,suffix=''){
+  const v=parseFloat(document.getElementById(inputId).value)||0;
+  document.getElementById(displayId).textContent=isDollar?fmt(v):(v+(suffix||''));
+  const range=document.getElementById(inputId+'Range');
+  if(range)range.value=v;
+}
+function syncRange(inputId,rangeId,displayId,isDollar,suffix=''){
+  const v=parseFloat(document.getElementById(rangeId).value)||0;
+  document.getElementById(inputId).value=v;
+  document.getElementById(displayId).textContent=isDollar?fmt(v):(v+(suffix||''));
+}
+function calculate(){
+  const balance=parseFloat(document.getElementById('balance').value)||350000;
+  const currentRate=parseFloat(document.getElementById('currentRate').value)||6.75;
+  const years=parseFloat(document.getElementById('years').value)||27;
+  const newRate=parseFloat(document.getElementById('newRate').value)||6.00;
+  const newTerm=parseFloat(document.getElementById('newTerm').value)||30;
+  const closing=parseFloat(document.getElementById('closing').value)||5000;
+  const currentMonths=years*12;
+  const newMonths=newTerm*12;
+  const currentPI=calcPI(balance,currentRate,currentMonths);
+  const newPI=calcPI(balance,newRate,newMonths);
+  const monthlySavings=currentPI-newPI;
+  document.getElementById('currentPayment').textContent=fmt(currentPI);
+  document.getElementById('newPayment').textContent=fmt(newPI);
+  document.getElementById('currentRateLabel').textContent='@ '+currentRate+'%';
+  document.getElementById('newRateLabel').textContent='@ '+newRate+'%';
+  const notWorthIt=document.getElementById('notWorthIt');
+  if(monthlySavings<=0){
+    notWorthIt.style.display='block';
+    document.getElementById('monthlySavings').textContent='$0/mo';
+    ['oneYear','fiveYear','tenYear','totalSavings'].forEach(id=>document.getElementById(id).textContent='$0');
+    document.getElementById('breakevenMonths').textContent='N/A';
+    document.getElementById('breakevenText').innerHTML='Refinancing at a higher rate or same rate would not reduce your monthly payment.';
+    document.getElementById('timelineFill').style.width='100%';
+    return;
+  }
+  notWorthIt.style.display='none';
+  document.getElementById('monthlySavings').textContent=fmt(monthlySavings)+'/mo';
+  document.getElementById('oneYear').textContent=fmt(monthlySavings*12);
+  document.getElementById('fiveYear').textContent=fmt(monthlySavings*60);
+  document.getElementById('tenYear').textContent=fmt(monthlySavings*120);
+  // Total savings over new loan vs continuing at current rate (use shorter of two)
+  const compareMonths=Math.min(currentMonths,newMonths);
+  document.getElementById('totalSavings').textContent=fmt(monthlySavings*compareMonths);
+  // Break-even
+  const breakevenMonths=closing>0?Math.ceil(closing/monthlySavings):0;
+  if(breakevenMonths>newMonths){
+    document.getElementById('breakevenMonths').textContent='Beyond loan term';
+    document.getElementById('breakevenText').innerHTML='At this rate, your savings would not cover closing costs within the loan term. Consider negotiating lower closing costs.';
+    document.getElementById('timelineFill').style.width='100%';
+  } else {
+    const pct=Math.min(100,(breakevenMonths/newMonths)*100);
+    document.getElementById('breakevenMonths').textContent=breakevenMonths+' months';
+    const yrs=Math.floor(breakevenMonths/12),mos=breakevenMonths%12;
+    const timeStr=yrs>0?(yrs+' yr'+(yrs>1?'s':''))+(mos>0?' '+mos+' mo':''):(breakevenMonths+' mo');
+    document.getElementById('breakevenText').innerHTML='After <strong>'+timeStr+'</strong>, your savings will have paid for your closing costs. Every month after that is pure savings.';
+    document.getElementById('timelineFill').style.width=pct+'%';
+    document.getElementById('breakevenLabel').textContent='Break-Even: '+breakevenMonths+' mo';
+  }
+  document.getElementById('endLabel').textContent=newTerm+' yrs';
+}
+calculate();
+</script>
+</body>
+</html>

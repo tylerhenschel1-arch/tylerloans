@@ -3,24 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mortgage Loan Programs | Tyler Henschel | CMG Home Loans Katy TX</title>
-<meta name="description" content="Explore FHA, VA, Conventional, Jumbo, All-In-One, renovation, and builder loan programs. Tyler Henschel, Senior Loan Officer, NMLS #2034073, Katy TX.">
+<title>Mortgage Loan Programs | Tyler Henschel | CMG Home Loans Houston TX</title>
+<meta name="description" content="Conventional, FHA, VA, All-In-One, Jumbo, and Construction loan programs serving Houston, Katy, Cypress, Sugar Land, and the greater Texas market. Tyler Henschel, NMLS #2034073.">
 <link rel="canonical" href="https://tylerhloans.com/products/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0a1628;--gold:#c9a84c;--gold-light:#e8c97a;--cream:#f7f4ef;--text:#1a1a2e;--muted:#5a6070;--white:#ffffff}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15)}
 .nav-brand{text-decoration:none;flex-shrink:0}
-.nav-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold-light);letter-spacing:0.03em}
+.nav-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold-light)}
 .nav-sub{font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.08em;margin-top:1px}
-.nav-links{display:flex;gap:2rem}
-.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;transition:color .2s}
+.nav-links{display:flex;gap:1.8rem}
+.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem;transition:color .2s}
 .nav-links a:hover,.nav-links a.active{color:var(--gold-light)}
-.nav-right{display:flex;align-items:center;gap:1rem}
-.nav-cta{background:var(--gold);color:var(--navy);font-size:0.78rem;font-weight:500;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none;transition:background .2s}
+.nav-right{display:flex;align-items:center;gap:0.7rem}
+.nav-apply{background:transparent;color:var(--gold);font-size:0.78rem;font-weight:500;padding:0.5rem 1rem;border-radius:4px;text-decoration:none;border:1px solid rgba(201,168,76,0.4)}
+.nav-apply:hover{background:rgba(201,168,76,0.1)}
+.nav-cta{background:var(--gold);color:var(--navy);font-size:0.78rem;font-weight:500;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none}
 .nav-cta:hover{background:var(--gold-light)}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
 .hamburger span{display:block;width:22px;height:2px;background:rgba(255,255,255,0.7);border-radius:2px}
@@ -29,32 +31,77 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-mobile.open{display:flex}
 @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}.hamburger{display:flex}}
 
-.page-hero{background:var(--navy);padding:8rem 6rem 4rem;position:relative;overflow:hidden}
-.page-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent)}
+.page-hero{background:var(--navy);padding:8rem 6rem 5rem;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1600&auto=format&fit=crop&q=80') center/cover no-repeat;opacity:0.07}
+.page-hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto}
 .eyebrow{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.7rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
 .eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);flex-shrink:0}
 .page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:400;color:var(--white);margin-bottom:1rem;line-height:1.2}
-.page-hero p{font-size:1rem;font-weight:300;color:rgba(255,255,255,0.5);max-width:540px;line-height:1.75}
-@media(max-width:768px){.page-hero{padding:6rem 1.5rem 3rem}}
+.page-hero p{font-size:1rem;font-weight:300;color:rgba(255,255,255,0.5);max-width:560px;line-height:1.75;margin-bottom:2rem}
+.hero-tabs{display:flex;gap:0.6rem;flex-wrap:wrap}
+.hero-tab{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);text-decoration:none;padding:0.45rem 1rem;border-radius:20px;font-size:0.78rem;transition:all .2s}
+.hero-tab:hover{border-color:var(--gold);color:var(--gold-light)}
+@media(max-width:768px){.page-hero{padding:6rem 1.5rem 3.5rem}}
 
-.products-body{max-width:900px;margin:0 auto;padding:4rem 2rem 6rem}
-.product-section{margin-bottom:4rem;scroll-margin-top:100px}
-.product-header{display:flex;align-items:flex-start;gap:1.2rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(10,22,40,0.08)}
-.product-emoji{font-size:2rem;flex-shrink:0;margin-top:4px}
-.product-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:400;color:var(--navy);margin-bottom:0.3rem}
-.product-subtitle{font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold)}
-.product-desc{font-size:0.97rem;font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:1.5rem}
-.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;margin-bottom:1.5rem}
-.feature{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;color:var(--text);font-weight:300}
-.feature::before{content:'✓';color:var(--gold);font-weight:600;flex-shrink:0;margin-top:1px}
-.product-cta{display:inline-flex;align-items:center;gap:0.5rem;background:var(--navy);color:var(--white);text-decoration:none;padding:0.75rem 1.8rem;border-radius:6px;font-size:0.85rem;font-weight:500;transition:all .2s}
-.product-cta:hover{background:var(--gold);color:var(--navy)}
-@media(max-width:600px){.features-grid{grid-template-columns:1fr}}
+/* Products Grid */
+.products-wrap{max-width:1200px;margin:0 auto;padding:5rem 2rem 6rem}
+.section-intro{margin-bottom:3rem}
+.section-label{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem}
+.section-label::before{content:'';width:20px;height:1px;background:var(--gold);flex-shrink:0}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.5vw,2.2rem);font-weight:400;color:var(--navy);margin-bottom:0.6rem}
+.section-sub{font-size:0.9rem;font-weight:300;color:var(--muted);line-height:1.8;max-width:600px}
+
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+@media(max-width:900px){.products-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.products-grid{grid-template-columns:1fr}}
+
+.prod-card{background:var(--white);border:1px solid rgba(10,22,40,0.08);border-radius:14px;padding:2rem;text-decoration:none;display:flex;flex-direction:column;transition:all .25s;position:relative;overflow:hidden}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.prod-card:hover{border-color:rgba(201,168,76,0.3);transform:translateY(-4px);box-shadow:0 12px 32px rgba(10,22,40,0.1)}
+.prod-card:hover::before{transform:scaleX(1)}
+.prod-icon{font-size:2rem;margin-bottom:1.2rem}
+.prod-tag{font-size:0.62rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
+.prod-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;color:var(--navy);margin-bottom:0.6rem;line-height:1.3}
+.prod-card p{font-size:0.82rem;font-weight:300;color:var(--muted);line-height:1.65;flex:1;margin-bottom:1.5rem}
+.prod-features{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.5rem}
+.prod-feature{font-size:0.76rem;font-weight:300;color:var(--text);display:flex;align-items:flex-start;gap:0.5rem;line-height:1.4}
+.prod-feature::before{content:'✓';color:var(--gold);font-weight:600;flex-shrink:0;font-size:0.7rem;margin-top:2px}
+.prod-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;font-weight:500;color:var(--gold);letter-spacing:0.03em;margin-top:auto}
+
+/* Special AIO card */
+.prod-card.featured{background:var(--navy);border-color:rgba(201,168,76,0.2)}
+.prod-card.featured .prod-tag{color:var(--gold)}
+.prod-card.featured h3{color:var(--white)}
+.prod-card.featured p{color:rgba(255,255,255,0.5)}
+.prod-card.featured .prod-feature{color:rgba(255,255,255,0.65)}
+.prod-card.featured .prod-feature::before{color:var(--gold)}
+.prod-card.featured .prod-link{color:var(--gold-light)}
+.prod-card.featured::before{background:var(--gold-light)}
+
+/* Specialty Section */
+.specialty-strip{background:var(--navy);border-radius:16px;padding:3rem;margin-top:3rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+@media(max-width:640px){.specialty-strip{grid-template-columns:1fr;padding:2rem}}
+.spec-item{padding:2rem;background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.12);border-radius:12px}
+.spec-icon{font-size:1.8rem;margin-bottom:1rem}
+.spec-item h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--white);margin-bottom:0.5rem}
+.spec-item p{font-size:0.82rem;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.65;margin-bottom:1.2rem}
+.spec-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;font-weight:500;color:var(--gold-light);text-decoration:none}
+.spec-link:hover{color:var(--gold)}
+
+/* CTA */
+.cta-strip{background:var(--white);border:1px solid rgba(10,22,40,0.08);border-radius:16px;padding:3rem;text-align:center;margin-top:3rem}
+.cta-strip h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:var(--navy);margin-bottom:0.7rem}
+.cta-strip p{font-size:0.88rem;font-weight:300;color:var(--muted);max-width:460px;margin:0 auto 2rem;line-height:1.7}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-navy{background:var(--navy);color:var(--white);text-decoration:none;padding:0.85rem 1.8rem;border-radius:6px;font-size:0.88rem;font-weight:500}
+.btn-navy:hover{background:#162040}
+.btn-gold-outline{background:transparent;color:var(--navy);text-decoration:none;padding:0.85rem 1.8rem;border-radius:6px;font-size:0.88rem;border:1px solid rgba(10,22,40,0.2)}
+.btn-gold-outline:hover{border-color:var(--gold);color:var(--gold)}
 
 footer{background:#060e1b;padding:2rem 6rem;border-top:1px solid rgba(201,168,76,0.1)}
 .footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
 .footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
-.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem;transition:color .2s}
+.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem}
 .footer-links a:hover{color:var(--gold-light)}
 hr{border:none;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:1.2rem}
 .footer-compliance p{font-size:0.7rem;color:rgba(255,255,255,0.2);line-height:1.7}
@@ -66,15 +113,18 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:1.2rem}
 <nav>
   <a class="nav-brand" href="/">
     <div class="nav-name">Tyler Henschel</div>
-    <div class="nav-sub">CMG Home Loans · Katy TX</div>
+    <div class="nav-sub">CMG Home Loans · NMLS #2034073</div>
   </a>
   <div class="nav-links">
     <a href="/">Home</a>
     <a href="/products/" class="active">Products</a>
-    <a href="/calculator/">Calculator</a>
+    <a href="/investors/">Investors</a>
+    <a href="/builders/">Builders</a>
+    <a href="/refinance/">Refinance</a>
     <a href="/blog/">Blog</a>
   </div>
   <div class="nav-right">
+    <a class="nav-apply" href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now</a>
     <a class="nav-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
     <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -82,160 +132,152 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:1.2rem}
   </div>
 </nav>
 <div class="nav-mobile" id="mobileNav">
-  <a href="/">Home</a>
-  <a href="/products/">Products</a>
-  <a href="/calculator/">Calculator</a>
-  <a href="/blog/">Blog</a>
+  <a href="/">Home</a><a href="/products/">Products</a><a href="/investors/">Investors</a><a href="/builders/">Builders</a><a href="/refinance/">Refinance</a><a href="/blog/">Blog</a>
+  <a href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now →</a>
   <a href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call →</a>
 </div>
 
 <div class="page-hero">
-  <div class="eyebrow">Loan Programs</div>
-  <h1>Every Loan Program<br>Houston Buyers Need.</h1>
-  <p>From zero-down VA loans to spec construction financing for builders — find the program that fits your situation, then book a call to get real numbers.</p>
+  <div class="page-hero-content">
+    <div class="eyebrow">Loan Programs</div>
+    <h1>Every Mortgage Houston<br>Needs — In One Place.</h1>
+    <p>From zero-down VA loans to DSCR investor financing, All-In-One cash flow optimization, jumbo luxury purchases, and custom construction — Tyler brings the full CMG product shelf to Houston, Katy, Cypress, and beyond.</p>
+    <div class="hero-tabs">
+      <a class="hero-tab" href="#conventional">Conventional</a>
+      <a class="hero-tab" href="#fha">FHA</a>
+      <a class="hero-tab" href="#va">VA</a>
+      <a class="hero-tab" href="#aio">All-In-One</a>
+      <a class="hero-tab" href="#jumbo">Jumbo</a>
+      <a class="hero-tab" href="#construction">Construction</a>
+    </div>
+  </div>
 </div>
 
-<div class="products-body">
+<div class="products-wrap">
 
-  <div class="product-section" id="fha">
-    <div class="product-header">
-      <div class="product-emoji">🏠</div>
-      <div>
-        <div class="product-title">FHA Loans</div>
-        <div class="product-subtitle">First-Time Buyers · Low Down Payment</div>
-      </div>
-    </div>
-    <p class="product-desc">FHA loans are one of the most popular choices for first-time homebuyers in the Houston area. Backed by the Federal Housing Administration, they allow lower credit scores and smaller down payments than conventional loans — making homeownership accessible to more buyers in Katy, Cypress, and Sugar Land.</p>
-    <div class="features-grid">
-      <div class="feature">Down payment as low as 3.5%</div>
-      <div class="feature">Credit scores from 580+</div>
-      <div class="feature">Higher debt-to-income flexibility</div>
-      <div class="feature">Available for primary residences</div>
-      <div class="feature">Seller can contribute to closing costs</div>
-      <div class="feature">15 and 30-year fixed options</div>
-    </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Talk to Tyler About FHA →</a>
+  <div class="section-intro">
+    <div class="section-label">Core Programs</div>
+    <h2 class="section-title">Six Products. One Expert.</h2>
+    <p class="section-sub">Tyler will match you to the right program the first time — not after three weeks of underwriting. Each loan type has a dedicated landing page with full details, FAQs, and Houston-specific guidance.</p>
   </div>
 
-  <div class="product-section" id="va">
-    <div class="product-header">
-      <div class="product-emoji">🎖️</div>
-      <div>
-        <div class="product-title">VA Loans</div>
-        <div class="product-subtitle">Veterans · Active Duty · Surviving Spouses</div>
+  <div class="products-grid">
+
+    <!-- CONVENTIONAL -->
+    <a class="prod-card" href="/products/conventional/" id="conventional">
+      <div class="prod-icon">📄</div>
+      <div class="prod-tag">Most Popular</div>
+      <h3>Conventional Loans</h3>
+      <p>The backbone of the Houston purchase market. Flexible terms, competitive pricing, PMI that disappears at 20% equity, and options for every buyer from first-timers to move-up buyers.</p>
+      <div class="prod-features">
+        <div class="prod-feature">Down payment from 3%</div>
+        <div class="prod-feature">No PMI at 20%+ down</div>
+        <div class="prod-feature">Investment &amp; second home eligible</div>
+        <div class="prod-feature">15, 20, and 30-year fixed options</div>
       </div>
-    </div>
-    <p class="product-desc">If you've served, you've earned one of the best mortgage benefits available anywhere. VA loans require zero down payment, no private mortgage insurance, and offer competitive rates. Many Houston-area veterans don't take full advantage of this benefit — let's make sure you do.</p>
-    <div class="features-grid">
-      <div class="feature">Zero down payment required</div>
-      <div class="feature">No private mortgage insurance (PMI)</div>
-      <div class="feature">Competitive interest rates</div>
-      <div class="feature">Available multiple times</div>
-      <div class="feature">Flexible credit requirements</div>
-      <div class="feature">Seller can pay all closing costs</div>
-    </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Check Your VA Eligibility →</a>
+      <span class="prod-link">Learn More →</span>
+    </a>
+
+    <!-- FHA -->
+    <a class="prod-card" href="/products/fha/" id="fha">
+      <div class="prod-icon">🏠</div>
+      <div class="prod-tag">First-Time Buyers</div>
+      <h3>FHA Loans</h3>
+      <p>Government-backed flexibility for buyers who don't have perfect credit or a large down payment. The most accessible path into a Houston home for many buyers.</p>
+      <div class="prod-features">
+        <div class="prod-feature">3.5% down with 580+ credit</div>
+        <div class="prod-feature">Higher DTI tolerance</div>
+        <div class="prod-feature">Gift funds allowed</div>
+        <div class="prod-feature">Assumable loan benefit</div>
+      </div>
+      <span class="prod-link">Learn More →</span>
+    </a>
+
+    <!-- VA -->
+    <a class="prod-card" href="/products/va/" id="va">
+      <div class="prod-icon">🎖️</div>
+      <div class="prod-tag">Veterans &amp; Active Duty</div>
+      <h3>VA Loans</h3>
+      <p>The most powerful benefit in mortgage. Zero down, no PMI, and competitive terms for the men and women who earned it. Houston has one of the largest veteran communities in Texas.</p>
+      <div class="prod-features">
+        <div class="prod-feature">Zero down payment required</div>
+        <div class="prod-feature">No private mortgage insurance ever</div>
+        <div class="prod-feature">Reusable benefit</div>
+        <div class="prod-feature">Assumable loan</div>
+      </div>
+      <span class="prod-link">Learn More →</span>
+    </a>
+
+    <!-- AIO -->
+    <a class="prod-card featured" href="/all-in-one/" id="aio">
+      <div class="prod-icon">⚡</div>
+      <div class="prod-tag">★ Signature Product</div>
+      <h3>All-In-One Loan</h3>
+      <p>Your mortgage fused with a checking account. Every dollar you hold reduces your balance daily — dramatically accelerating payoff and equity for business owners and strong cash-flow borrowers.</p>
+      <div class="prod-features">
+        <div class="prod-feature">Daily interest on net balance</div>
+        <div class="prod-feature">Access equity like a HELOC</div>
+        <div class="prod-feature">Ideal for variable income earners</div>
+        <div class="prod-feature">Available in Texas</div>
+      </div>
+      <span class="prod-link">Explore the AIO →</span>
+    </a>
+
+    <!-- JUMBO -->
+    <a class="prod-card" href="/products/jumbo/" id="jumbo">
+      <div class="prod-icon">🏰</div>
+      <div class="prod-tag">Luxury &amp; High-Value</div>
+      <h3>Jumbo Loans</h3>
+      <p>Above the conforming limit ($806K+ in Texas for 2025). For River Oaks, Memorial, West University, The Woodlands, and Houston's premium markets — Tyler moves these files fast.</p>
+      <div class="prod-features">
+        <div class="prod-feature">Loans above conforming limit</div>
+        <div class="prod-feature">10–20% down options</div>
+        <div class="prod-feature">Self-employed and asset programs</div>
+        <div class="prod-feature">Investment property jumbo</div>
+      </div>
+      <span class="prod-link">Learn More →</span>
+    </a>
+
+    <!-- CONSTRUCTION -->
+    <a class="prod-card" href="/products/construction/" id="construction">
+      <div class="prod-icon">🏗️</div>
+      <div class="prod-tag">Custom Builds</div>
+      <h3>Construction Loans</h3>
+      <p>Build your dream home on your lot with one-time close financing. Rate locked before ground breaks. Interest-only during construction. Converts automatically at CO — one closing, no re-qualifying.</p>
+      <div class="prod-features">
+        <div class="prod-feature">One closing — no second loan</div>
+        <div class="prod-feature">Rate locked at closing</div>
+        <div class="prod-feature">Available: Conventional, FHA, VA, USDA</div>
+        <div class="prod-feature">Draw schedule financing</div>
+      </div>
+      <span class="prod-link">Learn More →</span>
+    </a>
+
   </div>
 
-  <div class="product-section" id="conventional">
-    <div class="product-header">
-      <div class="product-emoji">📄</div>
-      <div>
-        <div class="product-title">Conventional Loans</div>
-        <div class="product-subtitle">Most Popular · Flexible Terms</div>
-      </div>
+  <!-- Specialty Programs -->
+  <div class="specialty-strip">
+    <div class="spec-item">
+      <div class="spec-icon">📈</div>
+      <h3>Investor Programs (DSCR)</h3>
+      <p>Qualify on rental income — not your tax returns. DSCR loans let investors scale without W-2 documentation. Close in your LLC. No hard portfolio cap.</p>
+      <a class="spec-link" href="/investors/">Explore Investor Financing →</a>
     </div>
-    <p class="product-desc">Conventional loans are the most common mortgage type in the Houston market. For buyers with strong credit and a solid down payment, they often provide the best combination of rate, flexibility, and long-term cost. Options include fixed and adjustable rate structures across various term lengths.</p>
-    <div class="features-grid">
-      <div class="feature">Down payment from 3% (with PMI)</div>
-      <div class="feature">No PMI at 20%+ down</div>
-      <div class="feature">15, 20, and 30-year fixed options</div>
-      <div class="feature">ARM options for shorter time horizons</div>
-      <div class="feature">Investment and second home eligible</div>
-      <div class="feature">Conforming and high-balance options</div>
+    <div class="spec-item">
+      <div class="spec-icon">🏢</div>
+      <h3>Builder Spec Financing</h3>
+      <p>Conventional, FHA, VA, and USDA spec programs for builders with CMG's Build &amp; Lock rate reservation. AIO is not available for spec construction in Texas.</p>
+      <a class="spec-link" href="/builders/">Explore Builder Programs →</a>
     </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">See Your Conventional Options →</a>
   </div>
 
-  <div class="product-section" id="aio">
-    <div class="product-header">
-      <div class="product-emoji">⚡</div>
-      <div>
-        <div class="product-title">All-In-One Loan</div>
-        <div class="product-subtitle">Business Owners · Investors · Cash Flow Optimizers</div>
-      </div>
+  <div class="cta-strip">
+    <h2>Not Sure Which Loan Fits?</h2>
+    <p>Book a free 30-minute call with Tyler. He'll run the numbers on your specific situation — credit, income, down payment, and goals — and tell you exactly which program wins for you.</p>
+    <div class="cta-btns">
+      <a class="btn-navy" href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now</a>
+      <a class="btn-gold-outline" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Free Call</a>
     </div>
-    <p class="product-desc">The All-In-One Loan fuses your mortgage with a checking account so every dollar of cash you hold reduces your balance — and the interest you pay — every single day. Business owners, self-employed borrowers, and investors with strong cash flow use this to build equity significantly faster than a traditional mortgage.</p>
-    <div class="features-grid">
-      <div class="feature">Daily interest calculation on net balance</div>
-      <div class="feature">Access equity like a HELOC</div>
-      <div class="feature">Accelerate payoff without extra payments</div>
-      <div class="feature">Ideal for variable income earners</div>
-      <div class="feature">HELOC alternative with one product</div>
-      <div class="feature">Available on primary residences in TX</div>
-    </div>
-    <a class="product-cta" href="/all-in-one/">See If AIO Is Right for You →</a>
-  </div>
-
-  <div class="product-section" id="jumbo">
-    <div class="product-header">
-      <div class="product-emoji">🏰</div>
-      <div>
-        <div class="product-title">Jumbo Loans</div>
-        <div class="product-subtitle">Luxury Homes · High-Value Properties</div>
-      </div>
-    </div>
-    <p class="product-desc">For home purchases above conventional conforming limits, jumbo loans provide financing for Houston's luxury market. Whether you're buying in the Energy Corridor, Memorial, or a custom estate in Katy — jumbo options exist for high-income and high-net-worth borrowers with the documentation to support it.</p>
-    <div class="features-grid">
-      <div class="feature">Loans above conventional limits</div>
-      <div class="feature">Multiple product series available</div>
-      <div class="feature">Fixed and adjustable rate options</div>
-      <div class="feature">Competitive pricing for strong profiles</div>
-      <div class="feature">Various documentation options</div>
-      <div class="feature">Primary, second home, investment</div>
-    </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Discuss Jumbo Financing →</a>
-  </div>
-
-  <div class="product-section" id="construction">
-    <div class="product-icon" style="font-size:2rem;margin-bottom:1rem">🏗️</div>
-    <div class="product-header">
-      <div class="product-emoji">🏗️</div>
-      <div>
-        <div class="product-title">Construction &amp; Renovation Loans</div>
-        <div class="product-subtitle">New Builds · Custom Homes · Renovations</div>
-      </div>
-    </div>
-    <p class="product-desc">Building or renovating in the Katy and Houston area? Construction-to-permanent loans, two-time close options, HomeStyle renovation, FHA 203k, and CHOICERenovation products are available to finance the build and convert to a permanent mortgage — without requiring two separate closings in most cases.</p>
-    <div class="features-grid">
-      <div class="feature">Construction-to-permanent financing</div>
-      <div class="feature">Two-time close conventional and jumbo</div>
-      <div class="feature">FHA 203k renovation loans</div>
-      <div class="feature">HomeStyle and CHOICERenovation</div>
-      <div class="feature">VA renovation options</div>
-      <div class="feature">Draw schedules for builder disbursements</div>
-    </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Plan Your Build →</a>
-  </div>
-
-  <div class="product-section" id="builder">
-    <div class="product-header">
-      <div class="product-emoji">🏢</div>
-      <div>
-        <div class="product-title">Builder &amp; Spec Construction Financing</div>
-        <div class="product-subtitle">Spec · Bridge · Horizontal · BuilderFLEX</div>
-      </div>
-    </div>
-    <p class="product-desc">CMG's builder platform provides capital across the full project lifecycle for experienced Houston-area builders. Whether you need ground-up spec financing, bridge capital for completed inventory, or the Build &amp; Lock rate reservation program to lock rates before your buyer is identified — we have a dedicated construction team to support it.</p>
-    <div class="features-grid">
-      <div class="feature">Spec (vertical) construction financing</div>
-      <div class="feature">Bridge loans for completed inventory</div>
-      <div class="feature">Horizontal land development financing</div>
-      <div class="feature">BuilderFLEX — one approval, multiple loans</div>
-      <div class="feature">Build &amp; Lock rate reservation program</div>
-      <div class="feature">Ideal for builders doing 5–50 homes/year</div>
-    </div>
-    <a class="product-cta" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Talk Builder Financing →</a>
   </div>
 
 </div>
@@ -243,11 +285,11 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:1.2rem}
 <footer>
   <div class="footer-top">
     <div>
-      <div class="nav-name" style="font-family:'Playfair Display',serif;color:var(--gold-light)">Tyler Henschel</div>
-      <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;margin-top:3px">Senior Loan Officer · CMG Home Loans</div>
+      <div style="font-family:'Playfair Display',serif;color:var(--gold-light);font-size:1rem">Tyler Henschel</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.08em;margin-top:3px">Senior Loan Officer · CMG Home Loans · NMLS #2034073</div>
     </div>
     <div class="footer-links">
-      <a href="/">Home</a><a href="/products/">Products</a><a href="/calculator/">Calculator</a><a href="/blog/">Blog</a>
+      <a href="/">Home</a><a href="/products/">Products</a><a href="/investors/">Investors</a><a href="/builders/">Builders</a><a href="/refinance/">Refinance</a><a href="/blog/">Blog</a>
       <a href="tel:9792556219">(979) 255-6219</a>
     </div>
   </div>
@@ -257,5 +299,6 @@ hr{border:none;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:1.2rem}
     <p>Offer of credit subject to credit approval. CMG Mortgage, Inc., dba CMG Financial NMLS #1820 is an equal opportunity lender. Not a commitment to lend. Equal Housing Lender.</p>
   </div>
 </footer>
+
 </body>
 </html>
