@@ -378,18 +378,33 @@ nav{{background:var(--navy);padding:1rem 2rem;display:flex;justify-content:space
 .cta-box p{{color:rgba(255,255,255,.55);margin-bottom:1.5rem;font-weight:300}}
 .cta-btn{{background:var(--gold);color:var(--navy);padding:.9rem 2rem;border-radius:4px;text-decoration:none;font-weight:500;display:inline-block}}
 .back{{display:block;text-align:center;margin-top:2rem;color:var(--muted);text-decoration:none;font-size:.85rem}}
+.author-bio{{background:var(--white);border:1px solid rgba(10,22,40,0.08);border-radius:16px;padding:2rem;margin-top:3rem;display:grid;grid-template-columns:140px 1fr;gap:1.8rem;align-items:center}}
+.author-bio-photo{{width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);flex-shrink:0}}
+.author-bio-photo img{{width:100%;height:100%;object-fit:cover;display:block}}
+.author-bio-label{{font-size:0.65rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem}}
+.author-bio h3{{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;color:var(--navy);margin-bottom:0.2rem}}
+.author-bio-title{{font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;font-weight:300}}
+.author-bio-desc{{font-size:0.85rem;font-weight:300;color:var(--muted);line-height:1.65;margin-bottom:1rem}}
+.author-bio-contact{{display:flex;flex-wrap:wrap;gap:0.8rem 1.5rem;font-size:0.78rem}}
+.author-bio-contact a{{color:var(--navy);text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:0.4rem}}
+.author-bio-contact a:hover{{color:var(--gold)}}
+.author-bio-nmls{{font-size:0.7rem;color:var(--muted);margin-top:0.8rem;font-weight:300;letter-spacing:0.04em}}
+@media(max-width:600px){{.author-bio{{grid-template-columns:1fr;text-align:center;padding:1.8rem}}.author-bio-photo{{margin:0 auto}}.author-bio-contact{{justify-content:center}}}}
 footer{{background:#060e1b;padding:2rem;text-align:center}}
 footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bottom:.2rem}}
 </style>
 </head>
 <body>
-<nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15)">
-<a style="text-decoration:none" href="/"><div style="font-family:'Playfair Display',serif;font-size:1rem;color:#e8c97a">Tyler Henschel</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.08em">CMG Home Loans · Katy TX</div></a>
-<div style="display:flex;gap:1.5rem;align-items:center">
-<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/">Home</a>
-<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/products/">Products</a>
-<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem" href="/calculator/">Calculator</a>
-<a style="color:#e8c97a;text-decoration:none;font-size:0.85rem" href="/blog/">Blog</a>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,22,40,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15);flex-wrap:wrap;gap:0.8rem">
+<a style="text-decoration:none" href="/"><div style="font-family:'Playfair Display',serif;font-size:1rem;color:#e8c97a">Tyler Henschel</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.08em">CMG Home Loans · NMLS #2034073</div></a>
+<div style="display:flex;gap:1.3rem;align-items:center;flex-wrap:wrap">
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem" href="/">Home</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem" href="/products/">Products</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem" href="/investors/">Investors</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem" href="/builders/">Builders</a>
+<a style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.82rem" href="/refinance/">Refinance</a>
+<a style="color:#e8c97a;text-decoration:none;font-size:0.82rem" href="/blog/">Blog</a>
+<a style="background:transparent;color:#c9a84c;font-size:0.78rem;font-weight:500;padding:0.45rem 1rem;border-radius:4px;text-decoration:none;border:1px solid rgba(201,168,76,0.4)" href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">Apply Now</a>
 <a style="background:#c9a84c;color:#0a1628;font-size:0.78rem;font-weight:500;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none" href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">Book a Call</a>
 </div>
 </nav>
@@ -401,6 +416,22 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 {content}
 {faq_html}
 <style>.faq-block{{background:#f7f4ef;border-radius:12px;padding:2rem;margin:2rem 0}}.faq-block h2{{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;color:#0a1628;margin-bottom:1.2rem}}.faq-item{{margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(10,22,40,0.08)}}.faq-item:last-child{{margin-bottom:0;padding-bottom:0;border-bottom:none}}.faq-item h3{{font-size:0.95rem;font-weight:500;color:#0a1628;margin-bottom:0.4rem}}.faq-item p{{font-size:0.88rem;font-weight:300;color:#5a6070;line-height:1.7}}</style>
+<div class="author-bio">
+<div class="author-bio-photo"><img src="/images/tyler-henschel.jpg" alt="Tyler Henschel Senior Loan Officer CMG Home Loans Houston Katy TX"></div>
+<div>
+<div class="author-bio-label">About the Author</div>
+<h3>Tyler Henschel</h3>
+<div class="author-bio-title">Senior Loan Officer &middot; CMG Home Loans</div>
+<p class="author-bio-desc">Tyler serves homebuyers, investors, and builders across the greater Houston area &mdash; Katy, Cypress, Sugar Land, The Woodlands, and beyond. From first-time buyers to seasoned investors scaling DSCR portfolios, his goal is straightforward: get you the right loan, the first time.</p>
+<div class="author-bio-contact">
+<a href="tel:9792556219">📞 (979) 255-6219</a>
+<a href="mailto:thenschel@cmghomeloans.com">✉️ thenschel@cmghomeloans.com</a>
+<a href="https://calendly.com/thenschel-cmghomeloans/30min" target="_blank">📅 Book a Call</a>
+<a href="https://www.cmghomeloans.com/mysite/tyler-henschel" target="_blank">📝 Apply Now</a>
+</div>
+<div class="author-bio-nmls">NMLS #2034073 &middot; 24285 Katy Freeway Suite 400-G, Katy TX 77494</div>
+</div>
+</div>
 <div class="cta-box">
 <h3>Ready to explore your options?</h3>
 <p>Tyler Henschel specializes in helping Houston-area borrowers find the right mortgage strategy. Book a free 20-minute call.</p>
