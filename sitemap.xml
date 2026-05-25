@@ -2,15 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://tylerhloans.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://tylerhloans.com/products/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/products/conventional/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/products/fha/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/products/va/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/products/jumbo/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/products/construction/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/investors/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/builders/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/refinance/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/all-in-one/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/calculator/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tylerhloans.com/calculator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://tylerhloans.com/blog/</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tylerhloans.com/all-in-one/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tylerhloans.com/blog/why-did-my-escrow-go-up-texas-homeowner-explanation/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
