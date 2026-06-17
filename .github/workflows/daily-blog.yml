@@ -1,9 +1,10 @@
 name: Daily Blog Post
 
 on:
-  schedule:
-    - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
-  workflow_dispatch:       # allow manual trigger from GitHub UI
+  # Daily schedule PAUSED — switching to weekly batch via Google Doc review
+  # schedule:
+  #   - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
+  workflow_dispatch:       # manual trigger only for now
 
 jobs:
   publish:
