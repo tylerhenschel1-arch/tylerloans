@@ -1,15 +1,41 @@
+"""
+Daily blog draft generator — writes to _drafts/ for Tyler review.
+
+Pipeline:
+  1. Pick today's topic from the rotating list
+  2. Generate the blog post body via Claude (with full CMG compliance rules)
+  3. Generate 3 FAQ items
+  4. Generate a 60-second video script
+  5. Write _drafts/<YYYY-MM-DD>_<slug>/
+       - index.html  -> pre-rendered blog page (publisher will move it to blog/)
+       - review.docx -> Tyler reviews this in Word/Pages; contains video script + body
+  6. Commit + push when running in CI
+
+Tyler's workflow after this script runs:
+  1. Pull the latest _drafts/
+  2. Open review.docx -> proofread, run through CMG AI
+  3. Record video reading the 60-second script
+  4. Upload to Submagic -> get final video -> upload to YouTube
+  5. Run: bin/publish <slug> --video <youtube-url>
+
+The publisher script handles moving the pre-rendered HTML into blog/,
+inserting the YouTube embed, updating posts.json + sitemap.xml,
+and committing the live version.
+"""
+
 import anthropic
 import os
 import json
 import datetime
 import re
+import subprocess
 
 client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
 
 TOPICS = [
     # First-time buyers — evergreen high volume
     "First time homebuyer mistakes to avoid in Houston TX in 2026",
-    "How much house can you really afford in Katy TX",
+    "How much house can you really afford in the Houston area",
     "FHA vs conventional loans in Houston — which is better for you",
     "VA loans explained for veterans and active duty buyers in Texas",
     "USDA loans in Texas — the hidden zero-down mortgage option",
@@ -18,7 +44,7 @@ TOPICS = [
     "Why two buyers with the same credit score get different rates",
     "The complete mortgage pre-approval checklist for Houston homebuyers",
     "What underwriters really look for — Houston mortgage guide",
-    "First time home buyer programs in Katy TX 2026",
+    "First time home buyer programs in the Houston metro 2026",
     "Down payment assistance programs in Texas — complete guide",
     "TDHCA loan programs explained for Texas first time buyers",
     "Grants vs down payment assistance — what is the difference in Texas",
@@ -47,177 +73,91 @@ TOPICS = [
     "Top questions buyers should ask their mortgage lender in Houston",
     "What I wish every Houston homebuyer knew before starting the process",
 
+    # Houston metro neighborhoods — distributed across the MSA
+    "Buying a home in Tomball TX — neighborhood guide and mortgage tips",
+    "Buying a home in Cypress TX — what buyers need to know",
+    "Buying a home in Sugar Land TX — neighborhood and financing guide",
+    "Buying a home in The Woodlands TX — mortgage and market guide",
+    "Buying a home in Pearland TX — what buyers should expect",
+    "Buying a home in Spring TX — neighborhood and mortgage primer",
+    "Buying a home in Magnolia TX — affordability and financing guide",
+    "Buying a home in Conroe TX — mortgage and lifestyle guide",
+    "Buying a home in Friendswood TX — a Houston buyer's perspective",
+    "Buying a home in Memorial Houston — luxury market financing",
+    "Buying a home in the Heights Houston — financing and considerations",
+    "Buying a home in Bellaire Houston — neighborhood and mortgage guide",
+    "Buying a home in Katy TX — neighborhood and mortgage guide",
+
     # Texas taxes and escrow — SEO goldmine
-    "MUD taxes in the Houston area explained for homebuyers",
-    "Why Texas property taxes shock first-time buyers",
-    "What is a MUD district and why does it matter in Katy TX",
-    "Houston area property taxes explained by county",
-    "Montgomery County vs Harris County taxes — which is better",
-    "Why new construction taxes are often estimated wrong in Texas",
-    "How builders underestimate property taxes in the Houston area",
-    "Why your mortgage payment can increase after closing in Texas",
-    "Escrow shortages explained for Texas homeowners",
-    "Why your escrow payment went up hundreds per month",
-    "How mortgage escrow accounts actually work in Texas",
-    "Can you waive escrow in Texas",
-    "The difference between city taxes county taxes and MUD taxes in Texas",
-    "What is a PID tax in Texas",
-    "MUD vs PID vs HOA — what is the difference in Houston suburbs",
-    "Why Texas has no state income tax but high property taxes",
-    "How homestead exemptions save Texas homeowners money",
-    "Over 65 property tax exemptions in Texas explained",
-    "Disabled veteran property tax exemptions in Texas",
-    "Why your first year tax bill on new construction is misleading in Texas",
-    "How supplemental tax bills catch Texas buyers off guard",
-    "Why Katy TX property taxes are higher than expected",
-    "Cypress vs Tomball vs Magnolia property taxes compared",
-    "Fort Bend County property tax breakdown for homebuyers",
-    "The cheapest Houston suburbs for property taxes",
-    "Why master-planned communities often have higher taxes in Texas",
-    "What happens to MUD taxes over time in Houston suburbs",
-    "Why some Texas neighborhoods have 3 percent or higher tax rates",
-    "How to calculate your real mortgage payment in Texas including taxes",
-    "Why Zillow mortgage payment estimates are often wrong in Texas",
-    "Understanding principal interest taxes and insurance in a Texas mortgage",
-    "Escrow refund checks explained for Texas homeowners",
-    "What happens if your escrow account goes negative in Texas",
-    "How lenders estimate taxes on new construction homes in Texas",
-    "Why appraised value and purchase price can differ in Texas",
-    "Texas appraisal districts explained for homeowners",
-    "How to protest your property taxes in Texas",
-    "Harris County property tax protest tips that actually work",
-    "Montgomery County property tax protest guide",
-    "How Texas property taxes affect debt-to-income ratios",
-    "What is an escrow cushion and why does it matter",
-    "How property tax payments work at closing in Texas",
-    "Why Texas closing costs are different than other states",
-    "Understanding daily interest charges at closing in Texas",
-    "Why your cash to close changed before closing day",
-    "Can MUD taxes ever go away in Texas",
+    "Understanding MUD taxes in Texas — what every Houston buyer should know",
+    "Why are Texas property taxes so high and what buyers can do",
+    "How property tax protests work in Harris County and Fort Bend",
+    "When does your Texas escrow account go up and why",
+    "What is a tax certificate and why your Houston builder should provide one",
+    "How appraisal districts assess your home in Texas",
+    "Why your Houston mortgage payment changed this year",
+    "Texas homestead exemption — what every homeowner needs to know",
+    "How to read your Texas property tax bill correctly",
+    "Why MUD districts exist in Katy and Cypress TX",
+    "What is a PID and how does it affect your Houston home",
+    "Why escrow shortages happen and how to avoid them",
+    "When can you remove escrow from your mortgage in Texas",
 
-    # Houston insurance — massive pain point
-    "Why Texas insurance costs are rising in 2026",
-    "Houston flood zones explained for homebuyers",
-    "Do you need flood insurance in Houston TX",
-    "Why Houston home insurance is so expensive",
-    "How insurance premiums affect your buying power in Texas",
-    "Why two homes with the same price have different payments in Houston",
-    "Why insurance quotes should be done early in the loan process",
-    "What happens if insurance comes in higher than expected at closing",
-    "Why new roof discounts matter for homeowners insurance in Texas",
-    "Does a pool increase your insurance costs in Texas",
-    "How solar panels affect home insurance and appraisals in Texas",
-    "Why Texas utility costs matter more than buyers think",
-    "Why some Houston neighborhoods have lower insurance rates",
-    "Understanding replacement cost vs market value insurance in Texas",
-    "Homeowners insurance deductibles explained for Texans",
-    "Why brick homes sometimes cost less to insure in Houston",
-    "How hurricane risk affects Houston mortgage costs",
-    "Why flood history matters more than flood zone maps in Houston",
+    # Investors and rental property
+    "DSCR loans for Houston investors — the complete 2026 guide",
+    "How to buy your first rental property in the Houston area",
+    "Should you use a HELOC or refinance to buy investment property",
+    "How investors use the AIO loan to scale faster in Texas",
+    "What is a 1031 exchange and how Houston investors use it",
+    "Investment property loan requirements in Texas 2026",
+    "How to structure your first 5 rental properties in Houston",
+    "Short term rental loans for Galveston and Houston investors",
+    "How DSCR loans calculate rental income in Texas",
+    "Conventional vs DSCR investment property loans — which to choose",
+    "Why Texas is a hot market for out of state real estate investors",
+    "How to refinance your Houston rental property in 2026",
+    "What is portfolio lending and how Houston investors benefit",
+    "How appraisals work on investment properties in Texas",
 
-    # New construction Houston — goldmine
-    "New construction loans explained for Houston TX buyers",
-    "Why builders offer mortgage incentives in Houston",
-    "The pros and cons of buying new construction in the Houston area",
-    "Spec home vs to-be-built — what is the difference in Katy TX",
-    "MUD taxes on new construction homes in Houston explained",
-    "Why new construction taxes are underestimated in Texas",
-    "Builder lender incentives vs higher tax rates in Houston",
-    "Why Texas new construction can still be a good deal in 2026",
-    "What upgrades are worth it in a new build in Houston",
-    "How long does it take to build a home in Texas",
-    "Can builder lenders be trusted — a Houston buyer's honest guide",
-    "New construction hidden costs Houston buyers need to know",
-    "Best master-planned communities near Katy TX for new construction",
-    "Custom home construction loans in Katy TX — step by step guide",
-    "What buyers need to know about special assessment taxes on new builds",
+    # All-In-One loan — Tyler's signature product
+    "What is the AIO loan and how does it work for Houston homeowners",
+    "All in One mortgage vs HELOC — which is right for your situation",
+    "How business owners in Houston can save big with the AIO loan",
+    "Why high earners benefit most from the All In One mortgage",
+    "How the AIO loan reduces interest using your daily cash flow",
+    "Self employed Houston homeowners — why AIO might be your best fit",
+    "Is the All In One mortgage right for Houston physicians and dentists",
+    "How real estate investors in Houston use the AIO for liquidity (on a primary or second home)",
+    "AIO loan calculator — how much can you save in Houston",
+    "How to qualify for an AIO loan in Texas",
+    "What kinds of income work best for AIO loans",
+    "AIO loan rates vs HELOC rates — what to know in 2026",
+    "Can you refinance into an AIO loan in Texas",
+    "Why the AIO loan is one of the most powerful loan products in Texas",
+    "How couples and dual-income households use AIO loans to build wealth",
 
-    # Mortgage mechanics — education content
-    "How mortgage rates actually work and what moves them daily",
-    "Why mortgage rates change every day in Texas",
-    "How inflation impacts mortgage rates in 2026",
-    "What the Federal Reserve actually controls for mortgage rates",
-    "Should you buy down your interest rate in Houston",
-    "2-1 buydowns explained in simple terms for Texas buyers",
-    "Temporary vs permanent rate buydowns — which is better",
-    "How seller credits can save buyers thousands in Texas",
-    "Understanding mortgage points — are they worth it in Houston",
-    "Fixed rate vs adjustable rate mortgages in Texas",
-    "What is an ARM and when does it make sense for Houston buyers",
-    "What is debt-to-income ratio and how does it affect you in Texas",
-    "How to lower your DTI before buying a home in Houston",
-    "What happens after you go under contract in Texas",
-    "The mortgage timeline from application to closing in Texas",
-    "Why deals fall apart during escrow in Houston",
-    "Common mortgage red flags that kill deals in Texas",
-    "Why your online mortgage quote is not always real",
-    "Mortgage shopping — how many lenders is too many in Texas",
-    "Does getting pre-approved hurt your credit score",
-    "How to read a loan estimate in Texas",
-    "Loan estimate vs closing disclosure explained",
-    "Why APR can be misleading for Texas homebuyers",
-    "How fast can you close on a mortgage in Houston",
-    "What delays mortgage closings in Texas",
-    "Why some buyers qualify online but not with a real lender in Texas",
-    "How HOA fees affect mortgage qualification in Texas",
+    # New construction and builders (Houston metro focus)
+    "Buying new construction in the Houston metro — buyer's complete guide",
+    "Best new home builders in the Houston metro 2026",
+    "Why you should use your own mortgage lender on a Houston new build",
+    "Two-Time Close construction loans in Texas — what to know",
+    "New construction vs resale in the Houston area — the real tradeoffs",
+    "What to negotiate when buying new construction in the Houston metro",
+    "Why builder incentives can hide bad mortgage terms",
+    "MUD bonds and your new construction Texas home",
+    "What inspectors look for in new construction homes in Houston",
+    "Buyer's checklist for new construction in the Houston metro",
 
-    # Pain point searches — highest conversion
-    "Why did my mortgage payment go up in Texas",
-    "Why did my escrow go up — Texas homeowner explanation",
-    "Why is homeowners insurance so expensive in Texas",
-    "Why was my mortgage denied in Texas",
-    "Why did underwriting ask for more documents",
-    "Why did my appraisal come in low in Houston",
-    "Why did my deal fall through at closing in Texas",
-    "Why is my cash to close higher than expected",
-    "Why is my debt-to-income ratio too high",
-    "Why some buyers regret buying too much house in Texas",
-    "What happens if property values decline in Texas",
-    "What happens if mortgage rates fall after you buy in Houston",
-    "Should you wait for a housing crash in Houston — honest answer",
-    "The biggest financial surprises Houston homebuyers face",
-    "Why Texans need larger emergency funds for homeownership",
-    "What happens if home prices keep rising in Houston",
-
-    # Investors and wealth
-    "DSCR loans for real estate investors in Houston TX",
-    "Bank statement loans explained for Texas business owners",
-    "How real estate investors use the AIO loan to preserve liquidity",
-    "How investors use leverage to scale real estate in Houston",
-    "All-In-One mortgage vs HELOC — what is the difference",
-    "Using home equity to build wealth in Texas",
-    "Cash-out refinance vs HELOC in Texas — which is right for you",
-    "How to use home equity as a business owner in Texas",
-    "Turning your current home into a rental in Houston",
-    "House hacking for beginners in the Houston area",
-    "Duplexes triplexes and fourplexes explained for Houston investors",
-    "FHA multi-unit loans for first-time investors in Texas",
-    "Should you refinance in 2026 — Texas homeowner guide",
-    "Can you buy a home before selling yours in Houston",
-    "Bridge loans explained for Houston homebuyers",
-    "Buying your second home while keeping your first in Texas",
-
-    # AIO and specialty products
-    "How business owners in Katy TX can save thousands using the All-In-One mortgage",
-    "How the All-In-One loan works — daily interest explained",
-    "All-In-One loan explained for Houston homeowners",
-    "How physicians and doctors can optimize their mortgage in Texas",
-    "How financial planners use the AIO loan for client wealth optimization",
-    "The All-In-One loan for real estate investors in Texas",
-    "How to reduce mortgage interest without refinancing in Texas",
-    "How to pay off your mortgage faster without extra payments",
-    "Jumbo loans in Houston — qualifying as a high income borrower",
-    "How to buy a luxury home with financing in Houston TX",
-    "Renovation loans in Houston — complete guide",
-    "The best mortgage programs most Houston buyers never hear about",
-    "VA loan benefits most Houston veterans do not know about",
-
-    # Builder and spec construction
-    "Spec construction financing for builders in the Houston area — how it works",
-    "Bridge loans for builders in Katy TX — freeing up capital between projects",
-    "CMG Build and Lock program — how Houston builders can lock rates before buyers are found",
-    "What is BuilderFLEX — spec construction financing for production builders in Texas",
-    "Spec vs custom construction loans in Katy TX — which is right for your project",
+    # Spec construction financing for builders
+    "How builders use spec financing to scale in the Houston market",
+    "What is a Spec Lock and how it protects Houston builders",
+    "Why Texas builders need a strong mortgage lender partner",
+    "Construction loan draws explained for Houston builders",
+    "How builders qualify buyers for FHA spec homes in Texas",
+    "Why VA buyers love new construction in the Houston metro market",
+    "How HomeStyle renovation loans work in the Houston area",
+    "Why builders should send their buyers to Tyler Henschel",
+    "Spec vs custom construction loans in Texas — which is right for your project",
     "How Houston builders use spec financing to scale inventory",
     "What builders need to know about construction capital in the Houston market",
     "How to finance land development and vertical construction in Texas",
@@ -236,14 +176,20 @@ TOPICS = [
 day_of_year = datetime.datetime.now().timetuple().tm_yday
 topic = TOPICS[day_of_year % len(TOPICS)]
 date_str = datetime.datetime.now().strftime("%B %d, %Y")
+date_iso = datetime.datetime.now().strftime("%Y-%m-%d")
 
 slug = topic.lower()
 slug = re.sub(r'[^a-z0-9\s]', '', slug)
 slug = re.sub(r'\s+', '-', slug.strip())
 slug = slug[:60].rstrip('-')
 
-print(f"Writing: {topic}")
+draft_dir = f"_drafts/{date_iso}_{slug}"
+print(f"Topic: {topic}")
+print(f"Draft folder: {draft_dir}")
 
+# ---------------------------------------------------------------------------
+# 1. FAQ generation
+# ---------------------------------------------------------------------------
 faq_message = client.messages.create(
     model="claude-haiku-4-5-20251001",
     max_tokens=600,
@@ -258,7 +204,7 @@ Format as JSON array only, no other text:
   {{"q": "Question three?", "a": "Answer three."}}
 ]
 
-Keep answers 2-3 sentences. Focus on what Houston TX homebuyers actually search for."""
+Keep answers 2-3 sentences. Focus on what Houston-area homebuyers actually search for. Rotate across Houston metro communities (Tomball, Cypress, Sugar Land, The Woodlands, Pearland, Spring, Magnolia, Conroe, Katy) — do not lean exclusively on Katy."""
     }]
 )
 
@@ -285,6 +231,9 @@ if faq_data:
     ])
     faq_html = f'<div class="faq-block"><h2>Frequently Asked Questions</h2>{faq_items_html}</div>'
 
+# ---------------------------------------------------------------------------
+# 2. Blog body generation
+# ---------------------------------------------------------------------------
 message = client.messages.create(
     model="claude-haiku-4-5-20251001",
     max_tokens=2000,
@@ -292,7 +241,7 @@ message = client.messages.create(
         "role": "user",
         "content": f"""Write an SEO-optimized blog post for tylerhloans.com about: {topic}
 
-Tyler Henschel is a Senior Loan Officer at CMG Home Loans in Katy TX (NMLS 2034073).
+Tyler Henschel is a Senior Loan Officer at CMG Home Loans serving the Greater Houston area (NMLS 2034073).
 Phone: (979) 255-6219
 Email: thenschel@cmghomeloans.com
 Calendly: https://calendly.com/thenschel-cmghomeloans/30min
@@ -301,7 +250,7 @@ Requirements:
 - 800 to 1000 words
 - Conversational but professional tone
 - Target keywords naturally
-- Focus on Katy TX and Houston TX market
+- Focus on the Houston MSA broadly. Tyler's office is in Katy but he serves the entire Houston metro — Tomball, Cypress, Sugar Land, The Woodlands, Pearland, Spring, Magnolia, Conroe, Friendswood, Memorial, Heights, Bellaire, and beyond. Do NOT lean on Katy as the default. Rotate which specific Houston neighborhood you mention based on the topic.
 - Strong CTA at the end to book a call with Tyler
 - Format as clean HTML using h2, h3, p, ul, li tags only
 - Start with a meta description comment like: <!-- META: description here -->
@@ -324,11 +273,16 @@ COMPLIANCE RULES (CMG Financial Marketing Policy — strictly follow all of thes
 - Use inclusive, welcoming language. Never use phrasing that could discourage any person from applying based on race, color, national origin, religion, sex, familial status, or disability (Fair Housing Act / ECOA compliance).
 - Do not make any statement that is inaccurate, inconsistent, or could be considered deceptive or misleading under UDAAP standards.
 
-PRODUCT ACCURACY — BUILDER AND SPEC FINANCING PROGRAMS:
-- CMG offers spec construction financing for experienced builders across four main products: Spec (vertical/ground-up), Bridge (completed inventory), Horizontal (land development), and BuilderFLEX (one approval, multiple projects). Always describe these accurately.
-- Spec construction financing targets experienced builders — typically 5 to 50 homes per year with a proven track record. Do not imply it is available to first-time or inexperienced builders.
-- The Spec Lock (Build and Lock) program allows builders to reserve a rate for 60 or 90 days for Conventional, FHA, VA, and USDA loans only. It is NOT available for Non-Agency products. Do not imply otherwise.
-- The List and Lock program is NOT available for AIO loans, HELOCs, construction loans, Non-QM, or bond/HFA loans. Do not describe it as available for those products.
+PRODUCT ACCURACY — CMG GUIDELINES YOU MUST RESPECT:
+- The All-In-One (AIO) loan is secured against a PRIMARY RESIDENCE or SECOND HOME only. Investment / rental properties are NOT eligible for AIO. Do not say or imply otherwise.
+- The AIO is a 30-year revolving line of credit. It does NOT have a separate "draw period followed by repayment period" the way a HELOC does. Interest accrues on the daily net balance.
+- CMG's conventional construction product uses a Two-Time Close structure (not single close). Minimum FICO is 720 for ground-up construction. The 680 minimum applies to renovation products only (HomeStyle, etc.), not ground-up construction.
+- For DSCR loans: the formula is Gross Rent / PITIA (monthly), NOT NOI / annual debt service. Gross rent comes from Form 1007/1025 or the lease — not NOI. Long-term DSCR minimums commonly range ~0.75–1.15. The 1.25 figure is specific to short-term-rental (STR) programs.
+- Texas A6 home equity rules: cash-out is capped at 80% LTV (vs 100% purchase, 95% rate/term). 12-day cooling-off period before closing. 1-year seasoning since the most recent prior equity loan. Disclosure notices in English and Spanish.
+- For DTI: Conventional purchase commonly works around 43–50% DTI depending on AUS. Non-QM (Edge, Sharp, Advantage) can accommodate up to 55%. CMG's conventional construction product caps back-end DTI at 45% and front-end at 38%. FHA TOTAL Scorecard routinely approves above 43% DTI.
+- PMI (conventional, removable at 20% equity) is DIFFERENT from FHA MIP (lifetime for most post-2013 FHA loans <10% down; only path to remove is refinance out of FHA). Never conflate the two.
+- Spec construction financing targets experienced builders — typically 5 to 50 homes per year with a proven track record.
+- The Spec Lock (Build and Lock) program is available for Conventional, FHA, VA, and USDA loans only. It is NOT available for Non-Agency products.
 - CRITICAL: The All-In-One (AIO) loan is NOT available for spec construction financing in Texas. Never suggest or imply that Texas builders can use the AIO loan for spec construction purposes."""
     }]
 )
@@ -336,14 +290,44 @@ PRODUCT ACCURACY — BUILDER AND SPEC FINANCING PROGRAMS:
 content = message.content[0].text
 
 meta_match = re.search(r'<!-- META: (.*?) -->', content)
-meta_desc = meta_match.group(1) if meta_match else f"Tyler Henschel, Senior Loan Officer in Katy TX, explains everything about {topic.lower()}."
+meta_desc = meta_match.group(1) if meta_match else f"Tyler Henschel, Senior Loan Officer serving the Greater Houston area, explains everything about {topic.lower()}."
 
+# ---------------------------------------------------------------------------
+# 3. 60-second video script generation (for Tyler to record)
+# ---------------------------------------------------------------------------
+script_message = client.messages.create(
+    model="claude-haiku-4-5-20251001",
+    max_tokens=400,
+    messages=[{
+        "role": "user",
+        "content": f"""Write a 60-second video script for Tyler Henschel (Senior Loan Officer, CMG Home Loans, NMLS #2034073) to read on camera. The video accompanies a blog post titled: "{topic}"
+
+Requirements:
+- 150 to 160 words exactly. Spoken pace is roughly 150 words per minute.
+- First person — Tyler talking directly to camera. Use "I", "me", "my".
+- HOOK in the first 7 seconds — get attention immediately. A surprising fact, common mistake, or pointed question.
+- Hit 2-3 main takeaways from the blog topic. Don't try to cover everything.
+- Soft CTA at the end: book a call at calendly.com/thenschel-cmghomeloans/30min OR visit tylerhloans.com
+- Conversational and natural — short sentences, contractions, real rhythm. Avoid corporate filler ("In today's video we will discuss"). Talk like a real person.
+- Tyler serves the entire Houston metro — Tomball, Cypress, Sugar Land, The Woodlands, Pearland, Spring, Magnolia, Conroe, Katy. Rotate which area you name based on topic relevance.
+- NO specific interest rates, APR figures, or "best/lowest/cheapest" superlatives. Compliance: do not imply pre-approval or guarantee.
+- AIO is for primary or second home only (not investment properties).
+- Do not include camera directions, stage notes, or "[pause]" markers. Just the words Tyler says.
+
+Output ONLY the script body. No intro line, no labels, no JSON. Just the words."""
+    }]
+)
+video_script = script_message.content[0].text.strip()
+
+# ---------------------------------------------------------------------------
+# 4. Pre-render the blog page HTML (publisher will move + add YouTube embed)
+# ---------------------------------------------------------------------------
 full_page = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{topic} | Tyler Henschel CMG Home Loans Katy TX</title>
+<title>{topic} | Tyler Henschel CMG Home Loans Houston TX</title>
 <meta name="description" content="{meta_desc}">
 <link rel="canonical" href="https://tylerhloans.com/blog/{slug}">
 <meta property="og:title" content="{topic} | Tyler Henschel">
@@ -367,6 +351,8 @@ nav{{background:var(--navy);padding:1rem 2rem;display:flex;justify-content:space
 .hero h1{{font-family:'Playfair Display',serif;color:var(--white);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:400;max-width:800px;margin:0 auto 1rem;line-height:1.2}}
 .hero-meta{{color:rgba(255,255,255,.45);font-size:.85rem}}
 .article{{max-width:780px;margin:3rem auto;padding:0 2rem 4rem}}
+.video-embed{{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-bottom:2.5rem;background:#000}}
+.video-embed iframe{{position:absolute;top:0;left:0;width:100%;height:100%;border:0}}
 .article h2{{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin:2rem 0 .8rem}}
 .article h3{{font-size:1.05rem;font-weight:500;color:var(--navy);margin:1.5rem 0 .5rem}}
 .article p{{font-size:.97rem;font-weight:300;line-height:1.8;color:var(--muted);margin-bottom:1.1rem}}
@@ -410,9 +396,10 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 </nav>
 <div class="hero">
 <h1>{topic}</h1>
-<p class="hero-meta">By Tyler Henschel &middot; {date_str} &middot; Katy, TX</p>
+<p class="hero-meta">By Tyler Henschel &middot; {date_str} &middot; Houston, TX</p>
 </div>
 <article class="article">
+<!-- VIDEO_EMBED_PLACEHOLDER -->
 {content}
 {faq_html}
 <style>.faq-block{{background:#f7f4ef;border-radius:12px;padding:2rem;margin:2rem 0}}.faq-block h2{{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;color:#0a1628;margin-bottom:1.2rem}}.faq-item{{margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(10,22,40,0.08)}}.faq-item:last-child{{margin-bottom:0;padding-bottom:0;border-bottom:none}}.faq-item h3{{font-size:0.95rem;font-weight:500;color:#0a1628;margin-bottom:0.4rem}}.faq-item p{{font-size:0.88rem;font-weight:300;color:#5a6070;line-height:1.7}}</style>
@@ -422,7 +409,7 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 <div class="author-bio-label">About the Author</div>
 <h3>Tyler Henschel</h3>
 <div class="author-bio-title">Senior Loan Officer &middot; CMG Home Loans</div>
-<p class="author-bio-desc">Tyler serves homebuyers, investors, and builders across the greater Houston area &mdash; Katy, Cypress, Sugar Land, The Woodlands, and beyond. From first-time buyers to seasoned investors scaling DSCR portfolios, his goal is straightforward: get you the right loan, the first time.</p>
+<p class="author-bio-desc">Tyler serves homebuyers, investors, and builders across the greater Houston area &mdash; Tomball, Cypress, Sugar Land, The Woodlands, Pearland, Spring, Magnolia, Conroe, Katy, and beyond. From first-time buyers to seasoned investors scaling DSCR portfolios, his goal is straightforward: get you the right loan, the first time.</p>
 <div class="author-bio-contact">
 <a href="tel:9792556219">📞 (979) 255-6219</a>
 <a href="mailto:thenschel@cmghomeloans.com">✉️ thenschel@cmghomeloans.com</a>
@@ -448,57 +435,141 @@ footer p{{font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.6;margin-bot
 </body>
 </html>"""
 
-os.makedirs(f"blog/{slug}", exist_ok=True)
-with open(f"blog/{slug}/index.html", "w") as f:
+os.makedirs(draft_dir, exist_ok=True)
+with open(f"{draft_dir}/index.html", "w") as f:
     f.write(full_page)
+print(f"Wrote {draft_dir}/index.html")
 
-print(f"Done: blog/{slug}/index.html")
+# Save metadata (publisher reads this when promoting to live)
+meta_payload = {
+    "topic": topic,
+    "slug": slug,
+    "date": date_str,
+    "date_iso": date_iso,
+    "meta_desc": meta_desc,
+}
+with open(f"{draft_dir}/meta.json", "w") as f:
+    json.dump(meta_payload, f, indent=2)
 
-# Update posts.json manifest (read existing, prepend new post, write back)
-posts_file = "blog/posts.json"
-posts = []
-if os.path.exists(posts_file):
-    with open(posts_file, "r") as f:
-        try:
-            posts = json.load(f)
-        except Exception:
-            posts = []
+# Save raw body content (publisher may use it for regenerated HTML if needed)
+with open(f"{draft_dir}/body.html", "w") as f:
+    f.write(content)
 
-new_entry = {"title": topic, "slug": slug, "date": date_str, "meta": meta_desc}
-posts = [p for p in posts if p.get("slug") != slug]  # remove duplicate if re-run
-posts.insert(0, new_entry)
+# ---------------------------------------------------------------------------
+# 5. Build the review.docx file Tyler proofreads
+# ---------------------------------------------------------------------------
+try:
+    from docx import Document
+    from docx.shared import Pt, RGBColor
+    from html.parser import HTMLParser
 
-with open(posts_file, "w") as f:
-    json.dump(posts, f, indent=2)
+    class _TextExtractor(HTMLParser):
+        """Convert simple blog HTML into ordered paragraphs/headings for docx."""
+        def __init__(self):
+            super().__init__()
+            self.blocks = []        # list of (style, text)
+            self.buf = []
+            self.current_style = "Normal"
+            self.in_list = False
+            self.li_buf = []
 
-print(f"Updated posts.json ({len(posts)} posts)")
+        def _flush(self):
+            text = "".join(self.buf).strip()
+            if text:
+                self.blocks.append((self.current_style, text))
+            self.buf = []
 
-# Update sitemap.xml with all blog posts
-blog_urls = "\n".join([
-    f'  <url><loc>https://tylerhloans.com/blog/{p["slug"]}/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>'
-    for p in posts
-])
-sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://tylerhloans.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://tylerhloans.com/products/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/calculator/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://tylerhloans.com/blog/</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://tylerhloans.com/all-in-one/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-{blog_urls}
-</urlset>"""
+        def handle_starttag(self, tag, attrs):
+            tag = tag.lower()
+            if tag in ("h1", "h2"):
+                self._flush()
+                self.current_style = "Heading 2"
+            elif tag == "h3":
+                self._flush()
+                self.current_style = "Heading 3"
+            elif tag == "h4":
+                self._flush()
+                self.current_style = "Heading 4"
+            elif tag == "p":
+                self._flush()
+                self.current_style = "Normal"
+            elif tag in ("ul", "ol"):
+                self.in_list = True
+            elif tag == "li":
+                self._flush()
+                self.current_style = "List Bullet"
 
-with open("sitemap.xml", "w") as f:
-    f.write(sitemap)
+        def handle_endtag(self, tag):
+            tag = tag.lower()
+            if tag in ("h1", "h2", "h3", "h4", "p", "li"):
+                self._flush()
+                self.current_style = "Normal"
+            elif tag in ("ul", "ol"):
+                self.in_list = False
 
-print(f"Updated sitemap.xml")
+        def handle_data(self, data):
+            self.buf.append(data)
 
-# Auto-commit and push if running in CI
+    doc = Document()
+
+    # ---- Header section ----
+    title_p = doc.add_heading(topic, level=1)
+
+    meta_lines = [
+        f"Publish date: {date_str}",
+        f"Slug: {slug}",
+        "Status: APPROVED   |   Mark DELETE or EDIT here: ___________________",
+        "Paste YouTube URL here (after recording + Submagic): ___________________",
+    ]
+    for line in meta_lines:
+        p = doc.add_paragraph(line)
+        p.paragraph_format.space_after = Pt(2)
+
+    doc.add_paragraph()  # spacer
+
+    # ---- Video script section ----
+    doc.add_heading("🎬 60-Second Video Script", level=2)
+    p = doc.add_paragraph(video_script)
+    p.paragraph_format.space_after = Pt(12)
+
+    doc.add_paragraph()  # spacer
+
+    # ---- Blog body section ----
+    doc.add_heading("📝 Blog Post", level=2)
+    parser = _TextExtractor()
+    parser.feed(content)
+    parser._flush()
+    for style, text in parser.blocks:
+        if style == "Normal":
+            doc.add_paragraph(text)
+        else:
+            try:
+                doc.add_paragraph(text, style=style)
+            except KeyError:
+                doc.add_paragraph(text)
+
+    # ---- FAQ section in docx ----
+    if faq_data:
+        doc.add_paragraph()
+        doc.add_heading("FAQ", level=2)
+        for f in faq_data:
+            p = doc.add_paragraph()
+            p.add_run(f["q"]).bold = True
+            doc.add_paragraph(f["a"])
+
+    doc.save(f"{draft_dir}/review.docx")
+    print(f"Wrote {draft_dir}/review.docx")
+
+except ImportError:
+    print("python-docx not installed; skipping review.docx")
+
+# ---------------------------------------------------------------------------
+# 6. Commit + push in CI
+# ---------------------------------------------------------------------------
 if os.environ.get("CI"):
-    import subprocess
     subprocess.run(["git", "config", "user.email", "blog-agent@tylerhloans.com"], check=True)
     subprocess.run(["git", "config", "user.name", "Blog Agent"], check=True)
-    subprocess.run(["git", "add", f"blog/{slug}/index.html"], check=True)
-    subprocess.run(["git", "commit", "-m", f"blog: {topic[:72]}"], check=True)
+    subprocess.run(["git", "add", draft_dir], check=True)
+    subprocess.run(["git", "commit", "-m", f"draft: {topic[:72]}"], check=True)
     subprocess.run(["git", "push"], check=True)
-    print("Pushed to GitHub.")
+    print(f"Pushed draft: {draft_dir}")

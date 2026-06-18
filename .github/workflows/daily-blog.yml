@@ -1,13 +1,12 @@
-name: Daily Blog Post
+name: Daily Blog Draft
 
 on:
-  # Daily schedule PAUSED — switching to weekly batch via Google Doc review
-  # schedule:
-  #   - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
-  workflow_dispatch:       # manual trigger only for now
+  schedule:
+    - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
+  workflow_dispatch:       # allow manual trigger from GitHub UI
 
 jobs:
-  publish:
+  generate:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,9 +21,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install anthropic
+        run: pip install anthropic python-docx
 
-      - name: Generate blog post
+      - name: Generate daily blog draft
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CI: true
