@@ -173,12 +173,15 @@ TOPICS = [
     "What makes a great loan officer in Houston TX",
 ]
 
-# Allow DAY_OFFSET env to generate a future-dated draft (used for batch
-# weekly generation: 0 = today, 1 = tomorrow, ..., 6 = next week).
+# Allow DAY_OFFSET env to generate a future- or past-dated draft (used for
+# batch weekly generation: 0 = today, 1 = tomorrow, -3 = three days ago).
 day_offset = int(os.environ.get("DAY_OFFSET", "0"))
 target_date = datetime.datetime.now() + datetime.timedelta(days=day_offset)
 day_of_year = target_date.timetuple().tm_yday
-topic = TOPICS[day_of_year % len(TOPICS)]
+
+# Allow TOPIC env to override topic selection (used for one-off custom drafts).
+topic = os.environ.get("TOPIC", "").strip() or TOPICS[day_of_year % len(TOPICS)]
+
 date_str = target_date.strftime("%B %d, %Y")
 date_iso = target_date.strftime("%Y-%m-%d")
 

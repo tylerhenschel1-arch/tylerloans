@@ -6,9 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       day_offset:
-        description: 'Day offset (0=today, 1=tomorrow, ..., 6=next week). Used for batch weekly generation.'
+        description: 'Day offset (0=today, 1=tomorrow, -3=three days ago).'
         required: false
         default: '0'
+      topic:
+        description: 'Override topic (leave blank to use rotating schedule).'
+        required: false
+        default: ''
 
 jobs:
   generate:
@@ -41,4 +45,5 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CI: true
           DAY_OFFSET: ${{ inputs.day_offset || '0' }}
+          TOPIC: ${{ inputs.topic || '' }}
         run: python blog_agent.py
