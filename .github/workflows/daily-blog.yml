@@ -3,7 +3,12 @@ name: Daily Blog Draft
 on:
   schedule:
     - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
-  workflow_dispatch:       # allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      day_offset:
+        description: 'Day offset (0=today, 1=tomorrow, ..., 6=next week). Used for batch weekly generation.'
+        required: false
+        default: '0'
 
 jobs:
   generate:
@@ -14,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,8 +30,15 @@ jobs:
       - name: Install dependencies
         run: pip install anthropic python-docx
 
-      - name: Generate daily blog draft
+      - name: Pull latest before generating
+        run: |
+          git config user.email "blog-agent@tylerhloans.com"
+          git config user.name "Blog Agent"
+          git pull --rebase origin main || true
+
+      - name: Generate blog draft
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CI: true
+          DAY_OFFSET: ${{ inputs.day_offset || '0' }}
         run: python blog_agent.py

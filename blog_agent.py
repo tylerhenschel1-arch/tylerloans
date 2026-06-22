@@ -173,10 +173,14 @@ TOPICS = [
     "What makes a great loan officer in Houston TX",
 ]
 
-day_of_year = datetime.datetime.now().timetuple().tm_yday
+# Allow DAY_OFFSET env to generate a future-dated draft (used for batch
+# weekly generation: 0 = today, 1 = tomorrow, ..., 6 = next week).
+day_offset = int(os.environ.get("DAY_OFFSET", "0"))
+target_date = datetime.datetime.now() + datetime.timedelta(days=day_offset)
+day_of_year = target_date.timetuple().tm_yday
 topic = TOPICS[day_of_year % len(TOPICS)]
-date_str = datetime.datetime.now().strftime("%B %d, %Y")
-date_iso = datetime.datetime.now().strftime("%Y-%m-%d")
+date_str = target_date.strftime("%B %d, %Y")
+date_iso = target_date.strftime("%Y-%m-%d")
 
 slug = topic.lower()
 slug = re.sub(r'[^a-z0-9\s]', '', slug)
