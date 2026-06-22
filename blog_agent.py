@@ -568,12 +568,29 @@ except ImportError:
     print("python-docx not installed; skipping review.docx")
 
 # ---------------------------------------------------------------------------
-# 6. Commit + push in CI
+# 6. Commit + push in CI (with retry to handle concurrent runs)
 # ---------------------------------------------------------------------------
 if os.environ.get("CI"):
+    import time
     subprocess.run(["git", "config", "user.email", "blog-agent@tylerhloans.com"], check=True)
     subprocess.run(["git", "config", "user.name", "Blog Agent"], check=True)
     subprocess.run(["git", "add", draft_dir], check=True)
     subprocess.run(["git", "commit", "-m", f"draft: {topic[:72]}"], check=True)
-    subprocess.run(["git", "push"], check=True)
-    print(f"Pushed draft: {draft_dir}")
+
+    # Retry push up to 5 times with pull-rebase between attempts (handles
+    # concurrent workflow runs from batch weekly generation).
+    for attempt in range(5):
+        push = subprocess.run(["git", "push"], capture_output=True, text=True)
+        if push.returncode == 0:
+            print(f"Pushed draft: {draft_dir}")
+            break
+        print(f"Push attempt {attempt+1} failed: {push.stderr.strip()[:200]}")
+        time.sleep(2 + attempt * 2)
+        pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"], capture_output=True, text=True)
+        if pull.returncode != 0:
+            print(f"Rebase failed: {pull.stderr.strip()[:200]}")
+            # If rebase fails, try without rebase
+            subprocess.run(["git", "rebase", "--abort"], capture_output=True)
+            subprocess.run(["git", "pull", "origin", "main"], capture_output=True)
+    else:
+        raise RuntimeError("Could not push draft after 5 attempts")
