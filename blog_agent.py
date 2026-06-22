@@ -249,6 +249,7 @@ message = client.messages.create(
         "content": f"""Write an SEO-optimized blog post for tylerhloans.com about: {topic}
 
 Tyler Henschel is a Senior Loan Officer at CMG Home Loans serving the Greater Houston area (NMLS 2034073).
+IMPORTANT: His last name is spelled HENSCHEL (H-E-N-S-C-H-E-L). Do NOT spell it Herschel, Hentschel, Hensel, or any other variant. Anywhere you write his name, the exact spelling is "Tyler Henschel."
 Phone: (979) 255-6219
 Email: thenschel@cmghomeloans.com
 Calendly: https://calendly.com/thenschel-cmghomeloans/30min
