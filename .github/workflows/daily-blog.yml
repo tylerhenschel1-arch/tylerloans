@@ -1,8 +1,9 @@
 name: Daily Blog Draft
 
 on:
-  schedule:
-    - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
+  # PAUSED — pivoting to video-first strategy. Re-enable by uncommenting.
+  # schedule:
+  #   - cron: '0 12 * * *'  # 7 AM Central (noon UTC)
   workflow_dispatch:
     inputs:
       day_offset:
